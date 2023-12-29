@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name ="product_details")
 @NoArgsConstructor
@@ -23,5 +26,9 @@ public class ProductDetail {
 
     @OneToOne(mappedBy="detail")
     Product product;
+
+    @OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ProductSpecification> specifications = new HashSet<>();
+
 
 }

@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -40,4 +42,6 @@ public class Product {
     @OneToMany(mappedBy = "product")
     @JsonIgnore
     private List<ProductImage> productImages;
+
+
 }
