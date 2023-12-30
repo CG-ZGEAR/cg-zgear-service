@@ -24,11 +24,12 @@ public class ProductDetail {
     @Column(name = "description")
     private String description;
 
-    @OneToOne(mappedBy="detail")
-    Product product;
+    @OneToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     @OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ProductSpecification> specifications = new HashSet<>();
+    private Set<Specification> specifications = new HashSet<>();
 
 
 }

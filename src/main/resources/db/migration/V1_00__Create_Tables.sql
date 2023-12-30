@@ -230,6 +230,33 @@ CREATE TABLE IF NOT EXISTS specification_templates
     id
 )
     );
+CREATE TABLE IF NOT EXISTS product_details
+(
+    id
+    BIGINT
+    NOT
+    NULL
+    PRIMARY
+    KEY
+    AUTO_INCREMENT,
+    product_id
+    BIGINT
+    NOT
+    NULL UNIQUE,
+    description
+    VARCHAR
+(
+    255
+),
+    CONSTRAINT products_id_fk FOREIGN KEY
+(
+    product_id
+) REFERENCES products
+(
+    id
+)
+    );
+
 
 
 CREATE TABLE IF NOT EXISTS specifications
@@ -239,7 +266,7 @@ CREATE TABLE IF NOT EXISTS specifications
     AUTO_INCREMENT
     PRIMARY
     KEY,
-    product_id
+    product_detail_id
     BIGINT
     NOT
     NULL,
@@ -254,8 +281,8 @@ CREATE TABLE IF NOT EXISTS specifications
 ) NOT NULL,
     FOREIGN KEY
 (
-    product_id
-) REFERENCES products
+    product_detail_id
+) REFERENCES product_details
 (
     id
 ),
@@ -263,44 +290,6 @@ CREATE TABLE IF NOT EXISTS specifications
 (
     template_id
 ) REFERENCES specification_templates
-(
-    id
-)
-    );
-
-CREATE TABLE IF NOT EXISTS product_details
-(
-    id
-    BIGINT
-    NOT
-    NULL
-    PRIMARY
-    KEY
-    AUTO_INCREMENT,
-    product_id
-    BIGINT
-    NOT
-    NULL,
-    specification_id
-    BIGINT
-    NOT
-    NULL,
-    description
-    VARCHAR
-(
-    255
-),
-    CONSTRAINT specification_id_fk FOREIGN KEY
-(
-    specification_id
-) REFERENCES specifications
-(
-    id
-),
-    CONSTRAINT products_id_fk FOREIGN KEY
-(
-    product_id
-) REFERENCES products
 (
     id
 )
