@@ -1,4 +1,4 @@
-package com.codegym.cgzgearservice.model.entitiy.product.specifications;
+package com.codegym.cgzgearservice.model.entitiy.product;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,11 @@ public class SpecificationTemplate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String category;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @Column(name= "spec_key")
     private String specKey;
 
 }

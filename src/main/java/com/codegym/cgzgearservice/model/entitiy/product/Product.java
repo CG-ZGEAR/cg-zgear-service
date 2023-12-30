@@ -31,10 +31,6 @@ public class Product {
     @Column(name = "is_deleted", nullable = false, columnDefinition = "BIT default false")
     private Boolean isDeleted;
 
-    @OneToOne(fetch =FetchType.EAGER)
-    @MapsId
-    ProductDetail detail;
-
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
@@ -42,6 +38,5 @@ public class Product {
     @OneToMany(mappedBy = "product")
     @JsonIgnore
     private List<ProductImage> productImages;
-
 
 }
