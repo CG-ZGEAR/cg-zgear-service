@@ -39,7 +39,7 @@ public class User {
     private String email;
 
     @Column(name = "date_of_birth")
-    private Date date;
+    private String date;
 
     @Column(name = "gender", length = 10)
     private String gender;
