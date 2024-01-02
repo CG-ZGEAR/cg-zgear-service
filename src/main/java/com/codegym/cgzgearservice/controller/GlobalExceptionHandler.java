@@ -20,7 +20,6 @@ public class GlobalExceptionHandler {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("message", ex.getMessage());
-
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 

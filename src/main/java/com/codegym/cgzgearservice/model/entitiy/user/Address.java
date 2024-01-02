@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="addresses")
+@Table(name = "addresses")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -19,19 +19,19 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="street")
+    @Column(name = "street")
     @NotBlank
     private String street;
 
-    @Column(name="city")
+    @Column(name = "city")
     @NotBlank
     private String city;
 
-    @Column(name="district")
+    @Column(name = "district")
     @NotBlank
     private String district;
 
-    @Column(name="ward")
+    @Column(name = "ward")
     @NotBlank
     private String ward;
 
@@ -39,11 +39,11 @@ public class Address {
     private Boolean isDeleted;
 
     @ManyToOne
-    @JoinColumn(name="user_id", nullable = true)
+    @JoinColumn(name = "user_id", nullable = true)
     User user;
 
     @ManyToOne
-    @JoinColumn(name="oder_id", nullable = true)
+    @JoinColumn(name = "oder_id", nullable = true)
     Order oder;
 
 
