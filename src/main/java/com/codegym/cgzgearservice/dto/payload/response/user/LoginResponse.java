@@ -1,4 +1,4 @@
 package com.codegym.cgzgearservice.dto.payload.response.user;
 
-public class RegisterReponse {
+public class LoginResponse {
 }
