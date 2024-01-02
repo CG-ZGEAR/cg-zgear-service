@@ -10,7 +10,6 @@ import java.util.List;
  * @author ADMIN
  */
 public interface UserRepository extends JpaRepository<User, Long> {
-    List<User> findByRoles_Name(String roleName);
 
     boolean existsByUsername(String username);
 }
