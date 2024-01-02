@@ -2,6 +2,7 @@ package com.codegym.cgzgearservice.service.impl;
 
 import com.codegym.cgzgearservice.dto.ProductDTO;
 import com.codegym.cgzgearservice.dto.SpecificationDTO;
+import com.codegym.cgzgearservice.exception.ResourceNotFoundException;
 import com.codegym.cgzgearservice.model.entitiy.product.Product;
 import com.codegym.cgzgearservice.model.entitiy.product.ProductDetail;
 import com.codegym.cgzgearservice.model.entitiy.product.ProductImage;
@@ -49,8 +50,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getProductById(Long productId) {
-        return null;
+    public ProductDTO getProductById(Long productId){
+        if (!productRepository.findById(productId).isPresent()){
+            throw new ResourceNotFoundException("Product with id " + productId+" not found in database");
+        } else {
+            Product product = productRepository.findById(productId).get();
+            ProductDTO productDTO = convertToProductDTO(product);
+            return productDTO;
+        }
     }
 
     public List<ProductDTO> getAllProducts() {
@@ -87,7 +94,6 @@ public class ProductServiceImpl implements ProductService {
 
     private SpecificationDTO convertToSpecificationDTO(Specification spec) {
         SpecificationDTO dto = new SpecificationDTO();
-        dto.setId(spec.getId());
         dto.setSpecKey(spec.getTemplate().getSpecKey());
         dto.setSpecValue(spec.getSpecValue());
         return dto;
