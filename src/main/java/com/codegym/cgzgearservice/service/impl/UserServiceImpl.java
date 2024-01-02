@@ -10,15 +10,11 @@ import com.codegym.cgzgearservice.repository.UserRepository;
 import com.codegym.cgzgearservice.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -76,6 +72,21 @@ public class UserServiceImpl implements UserService {
         }else {
             throw new RuntimeException("User not found with ID: " + userId);
         }
+    }
+    @Override
+    public List<UserDTO> getDeletedUsers() {
+        List<User> deletedUsers = userRepository.findByIsDeletedTrue();
+        return deletedUsers.stream()
+                .map(this::convertToUserDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserDTO> getActiveUsers() {
+        List<User> activeUsers = userRepository.findByIsDeletedFalse();
+        return activeUsers.stream()
+                .map(this::convertToUserDTO)
+                .collect(Collectors.toList());
     }
 
     private UserDTO convertToUserDTO(User user) {

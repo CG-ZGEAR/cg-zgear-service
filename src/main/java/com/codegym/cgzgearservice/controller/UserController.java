@@ -1,6 +1,7 @@
 package com.codegym.cgzgearservice.controller;
 
 import com.codegym.cgzgearservice.dto.UserDTO;
+import com.codegym.cgzgearservice.model.entitiy.user.User;
 import com.codegym.cgzgearservice.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,19 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    @GetMapping("/deleted-users")
+    public ResponseEntity<List<UserDTO>> getDeletedUsers() {
+        List<UserDTO> deletedUsers = userService.getDeletedUsers();
+        return new ResponseEntity<>(deletedUsers, HttpStatus.OK);
+    }
+
+    @GetMapping("/lists")
+    public ResponseEntity<List<UserDTO>> getActiveUsers() {
+        List<UserDTO> activeUsers = userService.getActiveUsers();
+        return new ResponseEntity<>(activeUsers, HttpStatus.OK);
+    }
+
     @PutMapping("/registers")
     public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO) {
         if (userDTO == null) {

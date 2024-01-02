@@ -65,7 +65,5 @@ public class User {
     @JsonIgnore
     List<Address> address;
 
-
-
 }
 
