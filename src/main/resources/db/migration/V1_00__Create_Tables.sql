@@ -1,389 +1,108 @@
-
-create table if not exists roles
-(
-    id
-    bigint
-    not
-    null
-    primary
-    key
-    auto_increment,
-    name
-    varchar
-(
-    50
-) not null
+CREATE TABLE IF NOT EXISTS roles (
+                                     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                                     name VARCHAR(50) NOT NULL
     );
 
-
-create table if not exists users
-(
-    id
-    bigint
-    not
-    null
-    primary
-    key
-    auto_increment,
-    date_of_birth
-    varchar
-(
-    20
-),
-    email varchar
-(
-    100
-) not null unique,
-    full_name varchar
-(
-    50
-) not null,
-    username varchar
-(
-    50
-) not null unique,
-    password varchar
-(
-    50
-) not null,
-    phone_number varchar
-(
-    15
-) not null,
-    avatar varchar
-(
-    50
-),
-    is_deleted bit default 0,
-    constraint users_uk unique
-(
-    username,
-    email,
-    phone_number
-)
+CREATE TABLE IF NOT EXISTS users (
+                                     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                                     date_of_birth VARCHAR(20),
+    email VARCHAR(100) NOT NULL UNIQUE,
+    full_name VARCHAR(50) NOT NULL,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(15) NOT NULL,
+    avatar VARCHAR(255),
+    gender VARCHAR(10),
+    is_deleted BIT DEFAULT 0,
+    CONSTRAINT users_uk UNIQUE (username, email, phone_number)
     );
 
-create table if not exists addresses
-(
-    id
-    bigint
-    not
-    null
-    primary
-    key
-    auto_increment,
-    user_id
-    bigint,
-    street
-    varchar
-(
-    45
-),
-    city varchar
-(
-    45
-),
-    district varchar
-(
-    45
-),
-    ward varchar
-(
-    45
-),
-    is_default bit default 0,
-    constraint user_id_fk foreign key
-(
-    user_id
-) references users
-(
-    id
-)
+CREATE TABLE IF NOT EXISTS addresses (
+                                         id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                                         user_id BIGINT,
+                                         street VARCHAR(45),
+    city VARCHAR(45),
+    district VARCHAR(45),
+    ward VARCHAR(45),
+    is_default BIT DEFAULT 0,
+    CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES users (id)
     );
 
-create table if not exists users_roles
-(
-    user_id
-    bigint
-    not
-    null,
-    role_id
-    bigint
-    not
-    null,
-    constraint
-    users_roles_pk
-    primary
-    key
-(
-    user_id,
-    role_id
-),
-    constraint users_roles_roles_fk foreign key
-(
-    role_id
-) references roles
-(
-    id
-),
-    constraint users_roles_users_fk foreign key
-(
-    user_id
-) references users
-(
-    id
-)
+CREATE TABLE IF NOT EXISTS users_roles (
+                                           user_id BIGINT NOT NULL,
+                                           role_id BIGINT NOT NULL,
+                                           CONSTRAINT users_roles_pk PRIMARY KEY (user_id, role_id),
+    CONSTRAINT users_roles_roles_fk FOREIGN KEY (role_id) REFERENCES roles (id),
+    CONSTRAINT users_roles_users_fk FOREIGN KEY (user_id) REFERENCES users (id)
     );
 
-create table if not exists categories
-(
-    id
-    bigint
-    not
-    null
-    primary
-    key
-    auto_increment,
-    category_name
-    varchar
-(
-    255
-)
+CREATE TABLE IF NOT EXISTS categories (
+                                          id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                                          category_name VARCHAR(255)
     );
 
-create table if not exists products
-(
-    id
-    bigint
-    not
-    null
-    primary
-    key
-    auto_increment,
-    product_name
-    varchar
-(
-    255
-),
-    price double,
-    category_id bigint not null,
-    is_deleted bit default 0,
-    constraint category_id_fk foreign key
-(
-    category_id
-) references categories
-(
-    id
-)
+CREATE TABLE IF NOT EXISTS products (
+                                        id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                                        product_name VARCHAR(255),
+    price DOUBLE,
+    category_id BIGINT NOT NULL,
+    is_deleted BIT DEFAULT 0,
+    CONSTRAINT category_id_fk FOREIGN KEY (category_id) REFERENCES categories (id)
     );
 
-create table if not exists product_images
-(
-    id
-    bigint
-    not
-    null
-    primary
-    key
-    auto_increment,
-    url
-    varchar
-(
-    255
-),
-    product_id bigint not null,
-    constraint product_id_fk foreign key
-(
-    product_id
-) references products
-(
-    id
-)
+CREATE TABLE IF NOT EXISTS product_images (
+                                              id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                                              url VARCHAR(255),
+    product_id BIGINT NOT NULL,
+    CONSTRAINT product_id_fk FOREIGN KEY (product_id) REFERENCES products (id)
     );
 
-CREATE TABLE IF NOT EXISTS specification_templates
-(
-    id
-    BIGINT
-    AUTO_INCREMENT
-    PRIMARY
-    KEY,
-    category_id
-    BIGINT
-    NOT
-    NULL,
-    spec_key
-    VARCHAR
-(
-    255
-) NOT NULL,
-    UNIQUE KEY
-(
-    category_id,
-    spec_key
-),
-    FOREIGN KEY
-(
-    category_id
-) REFERENCES categories
-(
-    id
-)
-    );
-CREATE TABLE IF NOT EXISTS product_details
-(
-    id
-    BIGINT
-    NOT
-    NULL
-    PRIMARY
-    KEY
-    AUTO_INCREMENT,
-    product_id
-    BIGINT
-    NOT
-    NULL UNIQUE,
-    description
-    VARCHAR
-(
-    255
-),
-    CONSTRAINT products_id_fk FOREIGN KEY
-(
-    product_id
-) REFERENCES products
-(
-    id
-)
+CREATE TABLE IF NOT EXISTS specification_templates (
+                                                       id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                                       category_id BIGINT NOT NULL,
+                                                       spec_key VARCHAR(255) NOT NULL,
+    UNIQUE KEY (category_id, spec_key),
+    FOREIGN KEY (category_id) REFERENCES categories (id)
     );
 
-
-
-CREATE TABLE IF NOT EXISTS specifications
-(
-    id
-    BIGINT
-    AUTO_INCREMENT
-    PRIMARY
-    KEY,
-    product_detail_id
-    BIGINT
-    NOT
-    NULL,
-    template_id
-    BIGINT
-    NOT
-    NULL,
-    spec_value
-    VARCHAR
-(
-    255
-) NOT NULL,
-    FOREIGN KEY
-(
-    product_detail_id
-) REFERENCES product_details
-(
-    id
-),
-    FOREIGN KEY
-(
-    template_id
-) REFERENCES specification_templates
-(
-    id
-)
+CREATE TABLE IF NOT EXISTS product_details (
+                                               id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                                               product_id BIGINT NOT NULL UNIQUE,
+                                               description VARCHAR(255),
+    CONSTRAINT products_id_fk FOREIGN KEY (product_id) REFERENCES products (id)
     );
 
-
-create table if not exists carts
-(
-    id
-    bigint
-    not
-    null
-    primary
-    key
-    auto_increment,
-    user_id
-    bigint
-    not
-    null,
-    cart_status
-    varchar
-(
-    45
-),
-    is_deleted bit default 0,
-    foreign key
-(
-    user_id
-) references users
-(
-    id
-)
+CREATE TABLE IF NOT EXISTS specifications (
+                                              id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                              product_detail_id BIGINT NOT NULL,
+                                              template_id BIGINT NOT NULL,
+                                              spec_value VARCHAR(255) NOT NULL,
+    FOREIGN KEY (product_detail_id) REFERENCES product_details (id),
+    FOREIGN KEY (template_id) REFERENCES specification_templates (id)
     );
 
-
-create table if not exists cartlines
-(
-    id
-    bigint
-    not
-    null
-    primary
-    key
-    auto_increment,
-    cart_id
-    bigint
-    not
-    null,
-    product_id
-    bigint
-    not
-    null,
-    quantity
-    int,
-    foreign
-    key
-(
-    cart_id
-) references carts
-(
-    id
-),
-    foreign key
-(
-    product_id
-) references products
-(
-    id
-)
+CREATE TABLE IF NOT EXISTS carts (
+                                     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                                     user_id BIGINT NOT NULL,
+                                     cart_status VARCHAR(45),
+    is_deleted BIT DEFAULT 0,
+    FOREIGN KEY (user_id) REFERENCES users (id)
     );
 
+CREATE TABLE IF NOT EXISTS cartlines (
+                                         id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                                         cart_id BIGINT NOT NULL,
+                                         product_id BIGINT NOT NULL,
+                                         quantity INT,
+                                         FOREIGN KEY (cart_id) REFERENCES carts (id),
+    FOREIGN KEY (product_id) REFERENCES products (id)
+    );
 
-create table if not exists orders
-(
-    id
-    bigint
-    not
-    null
-    primary
-    key
-    auto_increment,
-    status
-    varchar
-(
-    45
-),
-    cart_id bigint not null,
-    date_created datetime,
-    total int,
-    foreign key
-(
-    cart_id
-) references carts
-(
-    id
-)
+CREATE TABLE IF NOT EXISTS orders (
+                                      id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                                      status VARCHAR(45),
+    cart_id BIGINT NOT NULL,
+    date_created DATETIME,
+    total INT,
+    FOREIGN KEY (cart_id) REFERENCES carts (id)
     );
