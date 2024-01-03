@@ -11,7 +11,6 @@ import com.codegym.cgzgearservice.repository.SpecificationTemplateRepository;
 import com.codegym.cgzgearservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -42,7 +41,6 @@ public class ProductServiceImpl implements ProductService {
         createProductSpecifications(product, productDTO);
         return productDTO;
     }
-
     @Override
     public ProductDTO updateProduct(Long productId, ProductDTO productDTO) {
         Product product = productRepository.findById(productId)
@@ -67,6 +65,20 @@ public class ProductServiceImpl implements ProductService {
             ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
             return productDTO;
         }
+    }
+
+    @Override
+    public List<ProductDTO> searchByName(String name) {
+//        Query searchQuery = new NativeSearchQueryBuilder()
+//                .withQuery(matchQuery("name", name))
+//                .build();
+//
+//        SearchHits<Product> productHits =
+//                elasticsearchRestTemplate.search(searchQuery, Product.class);
+//        return productHits.stream()
+//                .map(SearchHit::getContent)
+//                .collect(Collectors.toList());
+    return null;
     }
 
 

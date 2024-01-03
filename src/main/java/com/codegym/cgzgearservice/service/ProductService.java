@@ -1,6 +1,7 @@
 package com.codegym.cgzgearservice.service;
 
 import com.codegym.cgzgearservice.dto.ProductDTO;
+import com.codegym.cgzgearservice.entitiy.product.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -12,4 +13,5 @@ public interface ProductService {
     ProductDTO getProductById(Long productId);
     Page<ProductDTO> getAllProducts(Pageable pageable);
     ProductDTO deleteProduct(Long productId);
+    List<ProductDTO> searchByName(String name);
 }
