@@ -1,16 +1,17 @@
 package com.codegym.cgzgearservice.service;
 
 import com.codegym.cgzgearservice.dto.ProductDTO;
-import com.codegym.cgzgearservice.model.entitiy.product.Product;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.codegym.cgzgearservice.entitiy.product.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface ProductService {
-    Product createProduct(ProductDTO productDTO);
-    Product updateProduct(Long productId, ProductDTO productDTO);
+    ProductDTO createProduct(ProductDTO productDTO);
+    ProductDTO updateProduct(Long productId, ProductDTO productDTO);
     ProductDTO getProductById(Long productId);
-    List<ProductDTO> getAllProducts();
-    void deleteProduct(Long productId);
+    Page<ProductDTO> getAllProducts(Pageable pageable);
+    ProductDTO deleteProduct(Long productId);
+    List<ProductDTO> searchByName(String name);
 }

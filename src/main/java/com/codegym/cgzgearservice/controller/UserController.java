@@ -1,8 +1,8 @@
 package com.codegym.cgzgearservice.controller;
 
 import com.codegym.cgzgearservice.dto.UserDTO;
-import com.codegym.cgzgearservice.model.entitiy.user.User;
 import com.codegym.cgzgearservice.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +12,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
+@AllArgsConstructor
 public class UserController {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers () {
@@ -38,14 +38,26 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<UserDTO> deleteUser(@PathVariable Long id) {
-        UserDTO user = userService.getUserById(id);
-
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
+        try {
+            userService.DeleteUserById(userId);
+            return ResponseEntity.ok("User deleted successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
-        userService.deleteUser(id);
-        return new ResponseEntity<>(user, HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/deleted-users")
+    public ResponseEntity<List<UserDTO>> getDeletedUsers() {
+        List<UserDTO> deletedUsers = userService.getDeletedUsers();
+        return new ResponseEntity<>(deletedUsers, HttpStatus.OK);
+    }
+
+    @GetMapping("/lists")
+    public ResponseEntity<List<UserDTO>> getActiveUsers() {
+        List<UserDTO> activeUsers = userService.getActiveUsers();
+        return new ResponseEntity<>(activeUsers, HttpStatus.OK);
+    }
+
 }
