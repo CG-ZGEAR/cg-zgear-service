@@ -2,7 +2,6 @@ package com.codegym.cgzgearservice.service.impl;
 
 
 import com.codegym.cgzgearservice.dto.UserDTO;
-import com.codegym.cgzgearservice.model.entitiy.user.Role;
 import com.codegym.cgzgearservice.model.entitiy.user.User;
 import com.codegym.cgzgearservice.repository.RoleRepository;
 import com.codegym.cgzgearservice.repository.UserRepository;
@@ -12,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -60,13 +59,35 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
+
+
+        @Override
+        public void DeleteUserById(Long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User userToDelete = userOptional.get();
+            userToDelete.setDeleted(true);
+            userRepository.save(userToDelete);
+        } else {
+            throw new RuntimeException("User not found with ID: " + userId);
+        }
+        }
+        @Override
+        public List<UserDTO> getDeletedUsers() {
+            List<User> deletedUsers = userRepository.findByIsDeletedTrue();
+            return deletedUsers.stream()
+                    .map(this::convertToUserDTO)
+                    .collect(Collectors.toList());
+        }
+        @Override
+        public List<UserDTO> getActiveUsers() {
+            List<User> activeUsers = userRepository.findByIsDeletedFalse();
+            return activeUsers.stream()
+                    .map(this::convertToUserDTO)
+                    .collect(Collectors.toList());
+        }
     private UserDTO convertToUserDTO(User user) {
         UserDTO dto = modelMapper.map(user, UserDTO.class);
         return dto;
     }
-
-    @Override
-    public void deleteUser(Long userId) {
-
     }
-}
