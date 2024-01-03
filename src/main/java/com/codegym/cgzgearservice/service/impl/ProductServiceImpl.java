@@ -2,12 +2,17 @@ package com.codegym.cgzgearservice.service.impl;
 
 import com.codegym.cgzgearservice.dto.ProductDTO;
 import com.codegym.cgzgearservice.dto.SpecificationDTO;
+import com.codegym.cgzgearservice.entitiy.product.*;
 import com.codegym.cgzgearservice.exception.ResourceNotFoundException;
-import com.codegym.cgzgearservice.model.entitiy.product.*;
-import com.codegym.cgzgearservice.repository.*;
+import com.codegym.cgzgearservice.repository.CategoryRepository;
+import com.codegym.cgzgearservice.repository.ProductDetailRepository;
+import com.codegym.cgzgearservice.repository.ProductRepository;
+import com.codegym.cgzgearservice.repository.SpecificationTemplateRepository;
 import com.codegym.cgzgearservice.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -17,26 +22,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-    @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
-    private ProductDetailRepository productDetailRepository;
-
-    @Autowired
-    private SpecificationTemplateRepository specificationTemplateRepository;
-
-    public ProductServiceImpl(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
+    private final ProductRepository productRepository;
+    private final ModelMapper modelMapper;
+    private final CategoryRepository categoryRepository;
+    private final ProductDetailRepository productDetailRepository;
+    private final SpecificationTemplateRepository specificationTemplateRepository;
 
     @Override
     public ProductDTO createProduct(ProductDTO productDTO) {
@@ -48,7 +41,6 @@ public class ProductServiceImpl implements ProductService {
         createProductSpecifications(product, productDTO);
         return productDTO;
     }
-
     @Override
     public ProductDTO updateProduct(Long productId, ProductDTO productDTO) {
         Product product = productRepository.findById(productId)
@@ -75,6 +67,20 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    @Override
+    public List<ProductDTO> searchByName(String name) {
+//        Query searchQuery = new NativeSearchQueryBuilder()
+//                .withQuery(matchQuery("name", name))
+//                .build();
+//
+//        SearchHits<Product> productHits =
+//                elasticsearchRestTemplate.search(searchQuery, Product.class);
+//        return productHits.stream()
+//                .map(SearchHit::getContent)
+//                .collect(Collectors.toList());
+    return null;
+    }
+
 
     @Override
     public ProductDTO getProductById(Long productId) {
@@ -86,12 +92,10 @@ public class ProductServiceImpl implements ProductService {
             return productDTO;
         }
     }
-
-    public List<ProductDTO> getAllProducts() {
-        List<Product> products = productRepository.findAll();
-        return products.stream()
-                .map(this::convertToProductDTO)
-                .collect(Collectors.toList());
+    @Override
+    public Page<ProductDTO> getAllProducts(Pageable pageable) {
+        Page<Product> products = productRepository.findAll(pageable);
+        return products.map(this::convertToProductDTO);
     }
 
     private ProductDTO convertToProductDTO(Product product) {

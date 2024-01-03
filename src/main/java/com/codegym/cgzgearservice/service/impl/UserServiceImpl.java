@@ -2,7 +2,8 @@ package com.codegym.cgzgearservice.service.impl;
 
 
 import com.codegym.cgzgearservice.dto.UserDTO;
-import com.codegym.cgzgearservice.model.entitiy.user.User;
+import com.codegym.cgzgearservice.entitiy.user.User;
+
 import com.codegym.cgzgearservice.repository.RoleRepository;
 import com.codegym.cgzgearservice.repository.UserRepository;
 import com.codegym.cgzgearservice.service.UserService;

@@ -1,4 +1,4 @@
-package com.codegym.cgzgearservice.model.entitiy.product;
+package com.codegym.cgzgearservice.entitiy.product;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,21 +7,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name= "product_images")
+@Table(name = "specification_templates")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class ProductImage {
+public class SpecificationTemplate {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "url", length = 255)
-    private String url;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @Column(name= "spec_key")
+    private String specKey;
 
 }
