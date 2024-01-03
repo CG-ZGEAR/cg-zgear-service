@@ -1,4 +1,4 @@
-package com.codegym.cgzgearservice.model.entitiy.product;
+package com.codegym.cgzgearservice.entitiy.product;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,7 +28,7 @@ public class ProductDetail {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "productDetail", cascade = CascadeType.ALL)
     private Set<Specification> specifications = new HashSet<>();
 
 

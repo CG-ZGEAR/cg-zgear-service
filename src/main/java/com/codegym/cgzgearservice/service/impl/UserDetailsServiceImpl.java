@@ -1,6 +1,6 @@
 package com.codegym.cgzgearservice.service.impl;
 
-import com.codegym.cgzgearservice.model.entitiy.user.User;
+import com.codegym.cgzgearservice.entitiy.user.User;
 import com.codegym.cgzgearservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,4 +1,4 @@
-package com.codegym.cgzgearservice.model.entitiy.product;
+package com.codegym.cgzgearservice.entitiy.product;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

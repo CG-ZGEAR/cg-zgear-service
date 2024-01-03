@@ -2,7 +2,7 @@ package com.codegym.cgzgearservice.service.impl;
 
 
 import com.codegym.cgzgearservice.dto.RoleDTO;
-import com.codegym.cgzgearservice.model.entitiy.user.Role;
+import com.codegym.cgzgearservice.entitiy.user.Role;
 import com.codegym.cgzgearservice.repository.RoleRepository;
 import com.codegym.cgzgearservice.service.RoleService;
 import jakarta.transaction.Transactional;

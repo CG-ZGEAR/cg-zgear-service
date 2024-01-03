@@ -1,6 +1,6 @@
-package com.codegym.cgzgearservice.model.entitiy.product;
+package com.codegym.cgzgearservice.entitiy.product;
 
-import com.codegym.cgzgearservice.model.entitiy.user.User;
+import com.codegym.cgzgearservice.entitiy.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
