@@ -2,7 +2,7 @@ package com.codegym.cgzgearservice.service.impl;
 
 
 import com.codegym.cgzgearservice.dto.UserDTO;
-import com.codegym.cgzgearservice.model.entitiy.user.User;
+import com.codegym.cgzgearservice.entitiy.user.User;
 import com.codegym.cgzgearservice.repository.RoleRepository;
 import com.codegym.cgzgearservice.repository.UserRepository;
 import com.codegym.cgzgearservice.service.UserService;
@@ -86,6 +86,28 @@ public class UserServiceImpl implements UserService {
                     .map(this::convertToUserDTO)
                     .collect(Collectors.toList());
         }
+
+    public void lockAccount(long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        userOptional.ifPresent(user -> {
+            if (!user.isLocked()) {
+                user.setLocked(true);
+                userRepository.save(user);
+            }
+        });
+    }
+
+    @Override
+    public void unlockAccount(long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        userOptional.ifPresent(user -> {
+            if (user.isLocked()) {
+                user.setLocked(false);
+                userRepository.save(user);
+            }
+        });
+    }
+
     private UserDTO convertToUserDTO(User user) {
         UserDTO dto = modelMapper.map(user, UserDTO.class);
         return dto;

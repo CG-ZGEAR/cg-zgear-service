@@ -1,6 +1,6 @@
-package com.codegym.cgzgearservice.model.entitiy.user;
+package com.codegym.cgzgearservice.entitiy.user;
 
-import com.codegym.cgzgearservice.model.entitiy.product.Order;
+import com.codegym.cgzgearservice.entitiy.product.Order;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

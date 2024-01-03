@@ -1,7 +1,6 @@
 package com.codegym.cgzgearservice.service;
 
 import com.codegym.cgzgearservice.dto.ProductDTO;
-import com.codegym.cgzgearservice.model.entitiy.product.Product;
 
 import java.util.List;
 

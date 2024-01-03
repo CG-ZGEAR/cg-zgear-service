@@ -1,4 +1,4 @@
-package com.codegym.cgzgearservice.model.entitiy.user;
+package com.codegym.cgzgearservice.entitiy.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,6 +48,9 @@ public class User {
 
     @Column(name = "avatar", length = 50)
     private String avatar;
+
+    @Column(name = "locked", nullable = false, columnDefinition = "BIT default false")
+    private boolean locked;
 
     @Column(name = "is_deleted",nullable = false,  columnDefinition = "BIT default true" )
     private boolean isDeleted;

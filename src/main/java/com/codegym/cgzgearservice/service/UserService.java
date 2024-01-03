@@ -2,7 +2,7 @@ package com.codegym.cgzgearservice.service;
 
 
 import com.codegym.cgzgearservice.dto.UserDTO;
-import com.codegym.cgzgearservice.model.entitiy.user.User;
+import com.codegym.cgzgearservice.entitiy.user.User;
 
 import java.util.List;
 
@@ -14,4 +14,6 @@ public interface UserService {
     void DeleteUserById(Long userId);
     List<UserDTO> getDeletedUsers();
     List<UserDTO> getActiveUsers();
-}
+    void lockAccount(long userId);
+    void unlockAccount(long userId);
+    }

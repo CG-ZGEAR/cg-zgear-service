@@ -1,4 +1,4 @@
-package com.codegym.cgzgearservice.model.entitiy.user;
+package com.codegym.cgzgearservice.entitiy.user;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

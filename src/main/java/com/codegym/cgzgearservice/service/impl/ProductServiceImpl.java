@@ -2,8 +2,8 @@ package com.codegym.cgzgearservice.service.impl;
 
 import com.codegym.cgzgearservice.dto.ProductDTO;
 import com.codegym.cgzgearservice.dto.SpecificationDTO;
+import com.codegym.cgzgearservice.entitiy.product.*;
 import com.codegym.cgzgearservice.exception.ResourceNotFoundException;
-import com.codegym.cgzgearservice.model.entitiy.product.*;
 import com.codegym.cgzgearservice.repository.*;
 import com.codegym.cgzgearservice.service.ProductService;
 import org.modelmapper.ModelMapper;
