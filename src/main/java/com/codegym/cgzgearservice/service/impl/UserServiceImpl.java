@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -43,14 +45,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(Long userId, UserDTO userDTO) {
+    public UserDTO updateUser(Long userId, UserDTO userDTO) {
         return null;
     }
 
     @Override
-    public User getUserById(Long userId) {
-        return null;
+    public UserDTO getUserById(Long userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        return modelMapper.map(user, UserDTO.class);
     }
+
+
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -66,7 +71,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(Long userId) {
-
+    public UserDTO deleteUser(Long userId) {
+        User user= userRepository.findUserById(userId);
+        if (user==null){
+            return null;
+        }
+        user.setDeleted(true);
+        user = userRepository.save(user);
+        UserDTO removedDTO = modelMapper.map(user, UserDTO.class);
+        return removedDTO;
     }
 }

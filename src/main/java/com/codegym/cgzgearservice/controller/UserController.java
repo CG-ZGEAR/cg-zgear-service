@@ -24,7 +24,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @PutMapping("/registers")
+    @PostMapping("/registers")
     public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO) {
         if (userDTO == null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -36,5 +36,16 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<UserDTO> deleteUser(@PathVariable Long id) {
+        UserDTO user = userService.getUserById(id);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        userService.deleteUser(id);
+        return new ResponseEntity<>(user, HttpStatus.NO_CONTENT);
     }
 }
