@@ -25,7 +25,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @PutMapping("/registers")
+    @PostMapping("/registers")
     public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO) {
         if (userDTO == null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
