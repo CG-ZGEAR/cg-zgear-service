@@ -1,7 +1,6 @@
 package com.codegym.cgzgearservice.controller;
 
 import com.codegym.cgzgearservice.dto.UserDTO;
-import com.codegym.cgzgearservice.model.entitiy.user.User;
 import com.codegym.cgzgearservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
