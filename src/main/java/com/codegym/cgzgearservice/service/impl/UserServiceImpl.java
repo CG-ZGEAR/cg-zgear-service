@@ -45,8 +45,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUser(Long userId, UserDTO userDTO) {
-        return null;
+    public UserDTO updateUser(UserDTO userDTO) {
+        User user = modelMapper.map(userDTO, User.class);
+        if (!userRepository.existsByUsername(user.getUsername())) {
+            throw new IllegalArgumentException("Username doesn't exists");
+        }
+        userRepository.save(user);
+        UserDTO savedDTO = modelMapper.map(user, UserDTO.class);
+        return savedDTO;
     }
 
     @Override
