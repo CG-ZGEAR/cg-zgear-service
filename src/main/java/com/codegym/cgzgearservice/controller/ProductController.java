@@ -1,10 +1,12 @@
 package com.codegym.cgzgearservice.controller;
 
 import com.codegym.cgzgearservice.dto.ProductDTO;
+import com.codegym.cgzgearservice.exception.ResourceNotFoundException;
 import com.codegym.cgzgearservice.service.ProductService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +23,9 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
     @PostMapping("/create")
-    public ResponseEntity<?> createOneProduct(ProductDTO productDTO){
-        productService.createProduct(productDTO);
-        return ResponseEntity.ok(productDTO);
+    public ResponseEntity<?> createOneProduct(@RequestBody ProductDTO productDTO){
+        ProductDTO createdProduct = productService.createProduct(productDTO);
+        return ResponseEntity.ok(createdProduct);
     }
 
     @GetMapping("/{productId}")
@@ -31,5 +33,30 @@ public class ProductController {
         ProductDTO productDTO = productService.getProductById(productId);
         return ResponseEntity.ok(productDTO);
     }
+    @PutMapping("/{productId}")
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long productId, @RequestBody ProductDTO productDTO) {
+        try {
+            ProductDTO updatedProduct = productService.updateProduct(productId, productDTO);
+            return ResponseEntity.ok(updatedProduct);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Long productId){
+        try {
+            productService.deleteProduct(productId);
+            return ResponseEntity.noContent().build();
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 
 }
