@@ -7,9 +7,14 @@ import com.codegym.cgzgearservice.model.entitiy.user.User;
 import java.util.List;
 
 public interface UserService {
-    UserDTO registerUser(UserDTO userDTO);
-    User updateUser(Long userId, UserDTO userDTO);
-    User getUserById(Long userId);
-    List<UserDTO> getAllUsers();
-    void deleteUser(Long userId);
+    List<UserDTO> getUsers();
+    UserDTO getUserById(Long userId);
+    UserDTO registerUser(UserDTO UserDTO);
+    UserDTO remove(Long id);
+    UserDTO findUserByUsername(String username);
+    UserDTO findUserByEmail(String email);
+
+    List<UserDTO> searchUsersByNameContains(String name);
+
+    UserDTO update(UserDTO userDTO);
 }
