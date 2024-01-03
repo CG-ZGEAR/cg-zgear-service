@@ -86,7 +86,6 @@ public class UserServiceImpl implements UserService {
                     .map(this::convertToUserDTO)
                     .collect(Collectors.toList());
         }
-
     public void lockAccount(long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
         userOptional.ifPresent(user -> {
