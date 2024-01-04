@@ -18,7 +18,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getAllUsers () {
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> users = userService.getAllUsers();
         System.out.println(users);
         return ResponseEntity.ok(users);
@@ -37,6 +37,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
@@ -60,4 +61,13 @@ public class UserController {
         return new ResponseEntity<>(activeUsers, HttpStatus.OK);
     }
 
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO, @PathVariable Long userId){
+    UserDTO user = userService.getUserById(userId);
+    if (userDTO == null){
+        return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+    }
+    userDTO.setId(user.getId());
+    return new ResponseEntity<>(userService.updateUser(userDTO), HttpStatus.OK);
+    }
 }

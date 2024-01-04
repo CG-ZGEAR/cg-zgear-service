@@ -18,7 +18,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 @Service @Transactional
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
+@Service
+
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -49,13 +55,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(Long userId, UserDTO userDTO) {
-        return null;
+    public UserDTO updateUser(UserDTO userDTO) {
+        User user = modelMapper.map(userDTO, User.class);
+        if (!userRepository.existsByUsername(user.getUsername())) {
+            throw new IllegalArgumentException("Username doesn't exists");
+        }
+        userRepository.save(user);
+        UserDTO savedDTO = modelMapper.map(user, UserDTO.class);
+        return savedDTO;
     }
 
     @Override
-    public User getUserById(Long userId) {
-        return null;
+    public UserDTO getUserById(Long userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        return modelMapper.map(user, UserDTO.class);
     }
 
 
@@ -67,9 +80,7 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
-
-
-        @Override
+    @Override
         public void DeleteUserById(Long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
@@ -98,4 +109,4 @@ public class UserServiceImpl implements UserService {
         UserDTO dto = modelMapper.map(user, UserDTO.class);
         return dto;
     }
-    }
+}

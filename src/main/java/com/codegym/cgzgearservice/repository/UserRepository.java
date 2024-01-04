@@ -1,15 +1,15 @@
 package com.codegym.cgzgearservice.repository;
 
+
 import com.codegym.cgzgearservice.entitiy.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import org.springframework.stereotype.Repository;
-
+import java.io.Serializable;
 import java.util.List;
 
-@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByUsername(String username);
     User findUserById(Long userId);
@@ -20,6 +20,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<String> findRolesNamesByUsername(@Param("username") String username);
 
     List<User> findByUsernameContainsIgnoreCase(String username);
+
+    User findUserById(Long userId);
 
     List<User> findByIsDeletedTrue();
 
