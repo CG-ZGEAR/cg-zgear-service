@@ -68,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> searchByProductName(String searchTerm) {
+    public List<ProductDTO> searchProduct(String searchTerm) {
         org.springframework.data.jpa.domain.Specification<Product> spec = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
