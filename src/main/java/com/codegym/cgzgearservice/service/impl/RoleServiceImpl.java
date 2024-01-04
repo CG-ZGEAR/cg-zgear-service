@@ -46,7 +46,6 @@ public class RoleServiceImpl implements RoleService {
         Role role = modelMapper.map(roleDto, Role.class);
         roleRepository.save(role);
     }
-
     @Override
     public void remove(Long id) {
         roleRepository.deleteById(id);
