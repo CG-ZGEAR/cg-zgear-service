@@ -9,16 +9,16 @@ import com.codegym.cgzgearservice.repository.ProductDetailRepository;
 import com.codegym.cgzgearservice.repository.ProductRepository;
 import com.codegym.cgzgearservice.repository.SpecificationTemplateRepository;
 import com.codegym.cgzgearservice.service.ProductService;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,19 +68,31 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> searchByName(String name) {
-//        Query searchQuery = new NativeSearchQueryBuilder()
-//                .withQuery(matchQuery("name", name))
-//                .build();
-//
-//        SearchHits<Product> productHits =
-//                elasticsearchRestTemplate.search(searchQuery, Product.class);
-//        return productHits.stream()
-//                .map(SearchHit::getContent)
-//                .collect(Collectors.toList());
-    return null;
-    }
+    public List<ProductDTO> searchByProductName(String searchTerm) {
+        org.springframework.data.jpa.domain.Specification<Product> spec = (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
 
+            //find by name
+            Predicate namePredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("productName")), "%" + searchTerm.toLowerCase() + "%");
+            predicates.add(namePredicate);
+
+            // Join to access specification values
+            Join<Product, ProductDetail> productDetailJoin = root.join("productDetail", JoinType.LEFT);
+            Join<ProductDetail, Specification> specificationJoin = productDetailJoin.join("specifications", JoinType.LEFT);
+
+            // Predicate for specification values
+            Predicate specValuePredicate = criteriaBuilder.like(
+                    criteriaBuilder.lower(specificationJoin.get("specValue")),
+                    "%" + searchTerm.toLowerCase() + "%"
+            );
+            predicates.add(specValuePredicate);
+
+            return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
+        };
+        return productRepository.findAll(spec).stream()
+                .map(this::convertToProductDTO)
+                .collect(Collectors.toList());
+    }
 
     @Override
     public ProductDTO getProductById(Long productId) {

@@ -20,11 +20,6 @@ import java.util.stream.Collectors;
 
 
 @Service @Transactional
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
-
-@Service
-
 public class UserServiceImpl implements UserService {
 
     @Autowired
