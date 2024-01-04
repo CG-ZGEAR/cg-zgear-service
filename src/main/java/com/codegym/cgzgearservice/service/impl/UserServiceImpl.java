@@ -2,43 +2,53 @@ package com.codegym.cgzgearservice.service.impl;
 
 
 import com.codegym.cgzgearservice.dto.UserDTO;
+import com.codegym.cgzgearservice.entitiy.user.Role;
 import com.codegym.cgzgearservice.entitiy.user.User;
 
 import com.codegym.cgzgearservice.repository.RoleRepository;
 import com.codegym.cgzgearservice.repository.UserRepository;
 import com.codegym.cgzgearservice.service.UserService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
+@Service @Transactional
+
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Service
+
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
-    private ModelMapper modelMapper;
-
+    private  ModelMapper modelMapper;
     @Autowired
-    private RoleRepository roleRepository;
+    RoleRepository roleRepository;
 
-    public UserServiceImpl(UserRepository userRepository){
-        this.userRepository = userRepository;
-    }
+
+
     @Override
     public UserDTO registerUser(UserDTO userDTO) {
         User user = modelMapper.map(userDTO, User.class);
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new IllegalArgumentException("Username already exists");
         }
-        user.getRoles();
+        if (!userDTO.getPassword().isEmpty()) {
+            String hashedPassword = BCrypt.hashpw(userDTO.getPassword(), BCrypt.gensalt(10));
+            user.setPassword(hashedPassword);
+        }
+        Role role = roleRepository.findRoleByName("ROLE_USER");
+        user.getRoles().add(role);
+        user.setActivated(true);
         userRepository.save(user);
         UserDTO savedDTO = modelMapper.map(user, UserDTO.class);
         return savedDTO;
