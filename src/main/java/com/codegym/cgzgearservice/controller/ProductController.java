@@ -24,18 +24,8 @@ public class ProductController {
     private final ProductService productService;
     @GetMapping
     public ResponseEntity<Page<ProductDTO>> getAllProducts(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "id-asc") String sort,
-            Pageable pageable) {
-
-        String[] sortParams = sort.split("-");
-        String sortField = sortParams[0];
-        Sort.Direction sortDirection = sortParams.length > 1 && "desc".equals(sortParams[1]) ? Sort.Direction.DESC : Sort.Direction.ASC;
-
-        pageable = PageRequest.of(page - 1, size, Sort.by(sortDirection, sortField));
+            @PageableDefault(size = 1, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         Page<ProductDTO> products = productService.getAllProducts(pageable);
-
         return ResponseEntity.ok(products);
     }
 
