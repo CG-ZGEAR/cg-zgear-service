@@ -27,7 +27,7 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart")
     @JsonIgnore
-    private List<CartItem> cartItems;
+    private List<Cartline> cartlines;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = true)

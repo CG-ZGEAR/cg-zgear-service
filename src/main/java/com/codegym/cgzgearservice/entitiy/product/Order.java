@@ -1,6 +1,5 @@
 package com.codegym.cgzgearservice.entitiy.product;
 
-import com.codegym.cgzgearservice.constants.OrderStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +8,6 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -22,22 +20,18 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String customerName;
+    @Column(name = "status", length =45)
+    private String status;
 
-    private String customerEmail;
+    @Column(name = "date_created")
+    @CreationTimestamp
+    private LocalDateTime dateCreated;
 
-    private String shippingAddress;
-
-    @Enumerated(EnumType.STRING)
-    private OrderStatus status;
-
-    private LocalDateTime orderDate;
-
-    private LocalDateTime paymentDate;
-
+    @Column(name = "total")
     private Double total;
 
-    @OneToMany(mappedBy="order")
-    private List<OrderItem> items;
+    @OneToOne
+    @JoinColumn(name="cart_id")
+    Cart cart;
 
 }
