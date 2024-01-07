@@ -19,7 +19,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 
-@Service @Transactional
+@Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -43,6 +44,7 @@ public class UserServiceImpl implements UserService {
         }
         Role role = roleRepository.findRoleByName("ROLE_USER");
         user.getRoles().add(role);
+        user.setDeleted(false);
         user.setActivated(true);
         userRepository.save(user);
         UserDTO savedDTO = modelMapper.map(user, UserDTO.class);
@@ -54,6 +56,10 @@ public class UserServiceImpl implements UserService {
         User user = modelMapper.map(userDTO, User.class);
         if (!userRepository.existsByUsername(user.getUsername())) {
             throw new IllegalArgumentException("Username doesn't exists");
+        }
+        if (!userDTO.getPassword().isEmpty()) {
+            String hashedPassword = BCrypt.hashpw(userDTO.getPassword(), BCrypt.gensalt(10));
+            user.setPassword(hashedPassword);
         }
         userRepository.save(user);
         UserDTO savedDTO = modelMapper.map(user, UserDTO.class);

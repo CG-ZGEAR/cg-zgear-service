@@ -151,4 +151,3 @@ VALUES (1, 1, 1),
 INSERT INTO orders (status, cart_id, date_created, total)
 VALUES ('Processed', 1, NOW(), 699.99),
        ('Shipped', 2, NOW(), 1299.99);
-
