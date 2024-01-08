@@ -1,6 +1,7 @@
 package com.codegym.cgzgearservice.service;
 
 
+import com.codegym.cgzgearservice.dto.ManageUserDTO;
 import com.codegym.cgzgearservice.dto.UserDTO;
 import com.codegym.cgzgearservice.entitiy.user.User;
 
@@ -14,6 +15,8 @@ public interface UserService {
     UserDTO getUserById(Long userId);
     List<UserDTO> getAllUsers();
     void DeleteUserById(Long userId);
-    List<UserDTO> getDeletedUsers();
-    List<UserDTO> getActiveUsers();
-}
+    List<ManageUserDTO> getDeletedUsers();
+    List<ManageUserDTO> getActiveUsers();
+    void lockAccount(long userId);
+    void unlockAccount(long userId);
+    }
