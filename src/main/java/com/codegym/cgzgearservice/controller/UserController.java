@@ -1,5 +1,6 @@
 package com.codegym.cgzgearservice.controller;
 
+import com.codegym.cgzgearservice.dto.ManageUserDTO;
 import com.codegym.cgzgearservice.dto.UserDTO;
 import com.codegym.cgzgearservice.service.UserService;
 import lombok.AllArgsConstructor;
@@ -18,13 +19,13 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping()
-    public ResponseEntity<List<UserDTO>> getActiveUsers() {
-        List<UserDTO> activeUsers = userService.getActiveUsers();
+    public ResponseEntity<List<ManageUserDTO>> getActiveUsers() {
+        List<ManageUserDTO> activeUsers = userService.getActiveUsers();
         return new ResponseEntity<>(activeUsers, HttpStatus.OK);
     }
     @GetMapping("/remove-user")
-    public ResponseEntity<List<UserDTO>> getDeletedUsers() {
-        List<UserDTO> deletedUsers = userService.getDeletedUsers();
+    public ResponseEntity<List<ManageUserDTO>> getDeletedUsers() {
+        List<ManageUserDTO> deletedUsers = userService.getDeletedUsers();
         return new ResponseEntity<>(deletedUsers, HttpStatus.OK);
     }
     @PostMapping("/{userId}/lock")
