@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
     phone_number VARCHAR(15) NOT NULL,
     avatar VARCHAR(255),
     gender VARCHAR(10),
-    locked BIT DEFAULT 0,
+    activated BIT DEFAULT 1,
     is_deleted BIT DEFAULT 0,
     CONSTRAINT users_uk UNIQUE (username, email, phone_number)
     );

@@ -29,6 +29,9 @@ public class Product {
     @Column(name = "is_deleted", nullable = false, columnDefinition = "BIT default false")
     private Boolean isDeleted;
 
+    @OneToOne(mappedBy = "product",fetch = FetchType.EAGER)
+    private ProductDetail productDetail;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
