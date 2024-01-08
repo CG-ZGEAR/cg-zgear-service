@@ -40,4 +40,7 @@ public class Product {
     @JsonIgnore
     private List<ProductImage> productImages;
 
+    @OneToMany(mappedBy = "product")
+    @JsonIgnore
+    private List<Review> reviews;
 }
