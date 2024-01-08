@@ -8,9 +8,11 @@ import com.codegym.cgzgearservice.entitiy.user.User;
 import java.util.List;
 
 public interface UserService {
+
+
     UserDTO registerUser(UserDTO userDTO);
-    User updateUser(Long userId, UserDTO userDTO);
-    User getUserById(Long userId);
+    UserDTO updateUser(UserDTO userDTO);
+    UserDTO getUserById(Long userId);
     List<UserDTO> getAllUsers();
     void DeleteUserById(Long userId);
     List<ManageUserDTO> getDeletedUsers();

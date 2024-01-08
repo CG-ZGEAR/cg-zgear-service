@@ -22,6 +22,7 @@ public class UserController {
     public ResponseEntity<List<ManageUserDTO>> getActiveUsers() {
         List<ManageUserDTO> activeUsers = userService.getActiveUsers();
         return new ResponseEntity<>(activeUsers, HttpStatus.OK);
+
     }
     @GetMapping("/remove-user")
     public ResponseEntity<List<ManageUserDTO>> getDeletedUsers() {
@@ -39,6 +40,7 @@ public class UserController {
         userService.unlockAccount(userId);
         return ResponseEntity.ok("Account unlocked successfully");
     }
+
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
         try {
@@ -62,4 +64,13 @@ public class UserController {
         }
     }
 
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO, @PathVariable Long userId){
+    UserDTO user = userService.getUserById(userId);
+    if (userDTO == null){
+        return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+    }
+    userDTO.setId(user.getId());
+    return new ResponseEntity<>(userService.updateUser(userDTO), HttpStatus.OK);
+    }
 }

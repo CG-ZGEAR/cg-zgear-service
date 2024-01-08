@@ -49,8 +49,8 @@ public class User {
     @Column(name = "avatar", length = 50)
     private String avatar;
 
-    @Column(name = "locked", nullable = false, columnDefinition = "BIT default false")
-    private boolean locked;
+    @Column(name = "activated", nullable = false,  columnDefinition = "BIT default true")
+    private Boolean activated;
 
     @Column(name = "is_deleted",nullable = false,  columnDefinition = "BIT default true" )
     private boolean isDeleted;
