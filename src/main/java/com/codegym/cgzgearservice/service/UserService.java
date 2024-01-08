@@ -1,6 +1,7 @@
 package com.codegym.cgzgearservice.service;
 
 
+import com.codegym.cgzgearservice.dto.ManageUserDTO;
 import com.codegym.cgzgearservice.dto.UserDTO;
 import com.codegym.cgzgearservice.dto.payload.request.ResetPasswordRequest;
 import com.codegym.cgzgearservice.dto.payload.response.ResetPasswordResponse;
@@ -25,3 +26,9 @@ public interface UserService {
     ResetPasswordResponse resetPassword(ResetPasswordRequest resetPasswordRequest);
 
 }
+
+    List<ManageUserDTO> getDeletedUsers();
+    List<ManageUserDTO> getActiveUsers();
+    void lockAccount(long userId);
+    void unlockAccount(long userId);
+    }

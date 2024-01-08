@@ -1,12 +1,12 @@
 package com.codegym.cgzgearservice.service.impl;
 
 
+import com.codegym.cgzgearservice.dto.ManageUserDTO;
 import com.codegym.cgzgearservice.dto.UserDTO;
 import com.codegym.cgzgearservice.dto.payload.request.ResetPasswordRequest;
 import com.codegym.cgzgearservice.dto.payload.response.ResetPasswordResponse;
 import com.codegym.cgzgearservice.entitiy.user.Role;
 import com.codegym.cgzgearservice.entitiy.user.User;
-
 import com.codegym.cgzgearservice.repository.RoleRepository;
 import com.codegym.cgzgearservice.repository.UserRepository;
 import com.codegym.cgzgearservice.service.UserService;
@@ -25,8 +25,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service @Transactional
 
+
+@Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -60,6 +62,7 @@ public class UserServiceImpl implements UserService {
         }
         Role role = roleRepository.findRoleByName("ROLE_USER");
         user.getRoles().add(role);
+        user.setDeleted(false);
         user.setActivated(true);
         userRepository.save(user);
         UserDTO savedDTO = modelMapper.map(user, UserDTO.class);
@@ -71,6 +74,10 @@ public class UserServiceImpl implements UserService {
         User user = modelMapper.map(userDTO, User.class);
         if (!userRepository.existsByUsername(user.getUsername())) {
             throw new IllegalArgumentException("Username doesn't exists");
+        }
+        if (!userDTO.getPassword().isEmpty()) {
+            String hashedPassword = BCrypt.hashpw(userDTO.getPassword(), BCrypt.gensalt(10));
+            user.setPassword(hashedPassword);
         }
         userRepository.save(user);
         UserDTO savedDTO = modelMapper.map(user, UserDTO.class);
@@ -104,17 +111,10 @@ public class UserServiceImpl implements UserService {
         }
         }
         @Override
-        public List<UserDTO> getDeletedUsers() {
+        public List<ManageUserDTO> getDeletedUsers() {
             List<User> deletedUsers = userRepository.findByIsDeletedTrue();
             return deletedUsers.stream()
-                    .map(this::convertToUserDTO)
-                    .collect(Collectors.toList());
-        }
-        @Override
-        public List<UserDTO> getActiveUsers() {
-            List<User> activeUsers = userRepository.findByIsDeletedFalse();
-            return activeUsers.stream()
-                    .map(this::convertToUserDTO)
+                    .map(this::convertToManageUserDTO)
                     .collect(Collectors.toList());
         }
 
@@ -158,8 +158,49 @@ public class UserServiceImpl implements UserService {
     }
 
 
+
+  
+    @Override
+    public List<ManageUserDTO> getActiveUsers() {
+        List<User> activeUsers = userRepository.findByIsDeletedFalse();
+        return activeUsers.stream()
+                .map(user -> {
+                    ManageUserDTO manageUserDTO = convertToManageUserDTO(user);
+                    manageUserDTO.setDeleted(false); 
+                    return manageUserDTO;
+                })
+                .collect(Collectors.toList());
+    }
+
+
+    public void lockAccount(long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        userOptional.ifPresent(user -> {
+            if (!user.isLocked()) {
+                user.setLocked(true);
+                userRepository.save(user);
+            }
+        });
+    }
+
+    @Override
+    public void unlockAccount(long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        userOptional.ifPresent(user -> {
+            if (user.isLocked()) {
+                user.setLocked(false);
+                userRepository.save(user);
+            }
+        });
+    }
+
     private UserDTO convertToUserDTO(User user) {
         UserDTO dto = modelMapper.map(user, UserDTO.class);
         return dto;
+    }
+    private ManageUserDTO convertToManageUserDTO(User user) {
+        ManageUserDTO dto = modelMapper.map(user, ManageUserDTO.class);
+        return dto;
+    }
     }
 }

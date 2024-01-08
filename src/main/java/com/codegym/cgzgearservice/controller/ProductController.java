@@ -1,11 +1,13 @@
 package com.codegym.cgzgearservice.controller;
 
 import com.codegym.cgzgearservice.dto.ProductDTO;
+import com.codegym.cgzgearservice.entitiy.product.Product;
 import com.codegym.cgzgearservice.exception.ResourceNotFoundException;
 import com.codegym.cgzgearservice.service.ProductService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -22,10 +24,17 @@ public class ProductController {
     private final ProductService productService;
     @GetMapping
     public ResponseEntity<Page<ProductDTO>> getAllProducts(
-            @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(size = 1, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         Page<ProductDTO> products = productService.getAllProducts(pageable);
         return ResponseEntity.ok(products);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductDTO>> searchProducts(@RequestParam String searchTerm) {
+        List<ProductDTO> products = productService.searchProduct(searchTerm);
+        return ResponseEntity.ok(products);
+    }
+
 
     @PostMapping("/create")
     public ResponseEntity<?> createOneProduct(@RequestBody ProductDTO productDTO){
