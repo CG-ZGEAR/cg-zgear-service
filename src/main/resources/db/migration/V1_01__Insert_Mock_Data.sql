@@ -83,11 +83,7 @@ VALUES (2, 'Screen Size'),
 
 -- Specification templates for Laptop
 INSERT INTO specification_templates (category_id, spec_key)
-VALUES (3, 'CPU'),
-       (3, 'RAM'),
-       (3, 'Storage'),
-       (3, 'Screen Size'),
-       (3, 'Battery Life');
+VALUES (3, 'CPU'), (3, 'RAM'), (3, 'Storage'), (3, 'Screen Size'), (3, 'Battery Life');
 
 -- Specification templates for Gaming PC
 INSERT INTO specification_templates (category_id, spec_key)
