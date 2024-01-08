@@ -81,6 +81,7 @@ public class UserServiceImpl implements UserService {
                     .collect(Collectors.toList());
         }
 <<<<<<< HEAD
+
     @Override
     public List<ManageUserDTO> getActiveUsers() {
         List<User> activeUsers = userRepository.findByIsDeletedFalse();
@@ -96,6 +97,7 @@ public class UserServiceImpl implements UserService {
 
 =======
 >>>>>>> 64beff8ea11026e9cd45f200f1f552bf8eb91cbf
+
     public void lockAccount(long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
         userOptional.ifPresent(user -> {
