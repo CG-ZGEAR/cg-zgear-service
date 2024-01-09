@@ -66,7 +66,7 @@ public class AuthController {
             if (roles.contains("ROLE_ADMIN")){
                 isAdmin=true;
             }
-            return new ResponseEntity<>(new LoginResponse("Đăng nhập thành công!", token,isAdmin), HttpStatus.OK);
+            return new ResponseEntity<>(new LoginResponse("Đăng nhập thành công!", roles,token), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(new LoginResponse("Đăng nhập thất bại!", null,false), HttpStatus.BAD_REQUEST);

@@ -52,4 +52,10 @@ public class LoginResponse {
     public void setRoles(List<String> roles) {
         this.roles = roles;
     }
+
+    public LoginResponse(String message, List<String> roles, @Nullable String token) {
+        this.message = message;
+        this.roles = roles;
+        this.token = token;
+    }
 }
