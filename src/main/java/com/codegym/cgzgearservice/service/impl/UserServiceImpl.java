@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
         Role role = roleRepository.findRoleByName("ROLE_USER");
         user.getRoles().add(role);
         user.setDeleted(false);
-        user.setActive(true);
+        user.setActivated(true);
         userRepository.save(user);
         UserDTO savedDTO = modelMapper.map(user, UserDTO.class);
         return savedDTO;
@@ -116,8 +116,8 @@ public class UserServiceImpl implements UserService {
     public void lockAccount(long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
         userOptional.ifPresent(user -> {
-            if (user.getActive()) {
-                user.setActive(false);
+            if (user.isActivated()) {
+                user.setActivated(false);
                 userRepository.save(user);
             }
         });
@@ -127,8 +127,8 @@ public class UserServiceImpl implements UserService {
     public void unlockAccount(long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
         userOptional.ifPresent(user -> {
-            if (!user.getActive()) {
-                user.setActive(true);
+            if (!user.isActivated()) {
+                user.setActivated(true);
                 userRepository.save(user);
             }
         });
