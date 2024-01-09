@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS specification_templates (
 CREATE TABLE IF NOT EXISTS product_details (
                                                id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
                                                product_id BIGINT NOT NULL UNIQUE,
-                                               description VARCHAR(255),
+                                               description TEXT,
     CONSTRAINT products_id_fk FOREIGN KEY (product_id) REFERENCES products (id)
     );
 
