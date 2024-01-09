@@ -22,6 +22,7 @@ public interface UserService {
     void save(UserDTO userDto);
     Iterable<UserDTO> findUser(String input);
     ResetPasswordResponse resetPassword(ResetPasswordRequest resetPasswordRequest);
+
     List<ManageUserDTO> getDeletedUsers();
     List<ManageUserDTO> getActiveUsers();
     void lockAccount(long userId);

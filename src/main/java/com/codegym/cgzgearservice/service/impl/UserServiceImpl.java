@@ -176,7 +176,7 @@ public class UserServiceImpl implements UserService {
     public void lockAccount(long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
         userOptional.ifPresent(user -> {
-            if (!user.getActivated()) {
+            if (!user.isActivated()) {
                 user.setActivated(true);
                 userRepository.save(user);
             }
@@ -187,7 +187,7 @@ public class UserServiceImpl implements UserService {
     public void unlockAccount(long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
         userOptional.ifPresent(user -> {
-            if (user.getActivated()) {
+            if (user.isActivated()) {
                 user.setActivated(false);
                 userRepository.save(user);
             }
@@ -203,3 +203,4 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 }
+

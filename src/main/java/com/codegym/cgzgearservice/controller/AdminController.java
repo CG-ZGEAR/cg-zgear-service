@@ -46,16 +46,8 @@ public class AdminController {
         return ResponseEntity.ok("Save/Update completed!");
     }
 
-    @DeleteMapping("/user-list/user/delete/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-        UserDTO userDTO = userService.getUserById(id);
-        String username = userDTO.getUsername();
-        userService.DeleteUserById(id);
-        return ResponseEntity.ok("User " + username + " deleted!");
-    }
     @GetMapping("/user-list/find-user/{input}")
     public ResponseEntity<Iterable<UserDTO>> findUser(@PathVariable String input) {
         return new ResponseEntity<>(userService.findUser(input), HttpStatus.OK);
     }
-
 }
