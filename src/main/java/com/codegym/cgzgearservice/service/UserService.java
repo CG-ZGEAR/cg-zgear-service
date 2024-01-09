@@ -19,14 +19,9 @@ public interface UserService {
     UserDTO getUserById(Long userId);
     List<UserDTO> getAllUsers();
     void DeleteUserById(Long userId);
-    List<UserDTO> getDeletedUsers();
-    List<UserDTO> getActiveUsers();
     void save(UserDTO userDto);
     Iterable<UserDTO> findUser(String input);
     ResetPasswordResponse resetPassword(ResetPasswordRequest resetPasswordRequest);
-
-}
-
     List<ManageUserDTO> getDeletedUsers();
     List<ManageUserDTO> getActiveUsers();
     void lockAccount(long userId);
