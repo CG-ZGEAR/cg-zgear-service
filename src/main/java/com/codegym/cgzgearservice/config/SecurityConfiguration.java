@@ -2,6 +2,7 @@ package com.codegym.cgzgearservice.config;
 
 import com.codegym.cgzgearservice.security.JwtAccessDeniedHandler;
 import com.codegym.cgzgearservice.security.JwtAuthenticationEntryPoint;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -28,9 +29,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @Configuration
 @ComponentScan("com.codegym.cgzgearservice.security")
+@RequiredArgsConstructor
 public class SecurityConfiguration {
-    @Autowired
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Bean
     public Filter jwtAuthenticationFilter() {
