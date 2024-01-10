@@ -67,7 +67,7 @@ public class SecurityConfiguration {
                 .disable();
         http
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/api/login","/api/users/register","/api/products").permitAll()
+                        .requestMatchers("/api/login","/api/users/register","/api/products","/api/products/**").permitAll()
                         .requestMatchers("/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 );
