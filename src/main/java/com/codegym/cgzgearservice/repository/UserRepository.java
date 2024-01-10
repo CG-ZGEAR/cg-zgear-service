@@ -2,6 +2,8 @@ package com.codegym.cgzgearservice.repository;
 
 import com.codegym.cgzgearservice.dto.UserDTO;
 import com.codegym.cgzgearservice.entitiy.user.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,7 +24,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findUserById(Long userId);
 
-    List<User> findByIsDeletedTrue();
+    Page <User> findByIsDeletedTrue(Pageable pageable);
 
-    List<User> findByIsDeletedFalse();
+    Page <User> findByIsDeletedFalse(Pageable pageable);
+    User findByEmail(String email);
 }

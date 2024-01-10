@@ -3,6 +3,8 @@ package com.codegym.cgzgearservice.service.impl;
 
 import com.codegym.cgzgearservice.dto.ManageUserDTO;
 import com.codegym.cgzgearservice.dto.UserDTO;
+import com.codegym.cgzgearservice.dto.payload.request.ResetPasswordRequest;
+import com.codegym.cgzgearservice.dto.payload.response.ResetPasswordResponse;
 import com.codegym.cgzgearservice.entitiy.user.Role;
 import com.codegym.cgzgearservice.entitiy.user.User;
 import com.codegym.cgzgearservice.repository.RoleRepository;
@@ -11,12 +13,18 @@ import com.codegym.cgzgearservice.service.UserService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 
 
 @Service
@@ -31,6 +39,16 @@ public class UserServiceImpl implements UserService {
     RoleRepository roleRepository;
 
 
+    @Override
+    public Page<UserDTO> findAll(Pageable pageable) {
+        Page<User> entities = userRepository.findAll(pageable);
+
+        List<UserDTO> dtos = entities.getContent().stream()
+                .map(entity -> modelMapper.map(entity, UserDTO.class))
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(dtos, pageable, entities.getTotalElements());
+    }
 
     @Override
     public UserDTO registerUser(UserDTO userDTO) {
@@ -91,33 +109,70 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new RuntimeException("User not found with ID: " + userId);
         }
-        }
-        @Override
-        public List<ManageUserDTO> getDeletedUsers() {
-            List<User> deletedUsers = userRepository.findByIsDeletedTrue();
-            return deletedUsers.stream()
-                    .map(this::convertToManageUserDTO)
-                    .collect(Collectors.toList());
-        }
+    }
+
+
 
     @Override
-    public List<ManageUserDTO> getActiveUsers() {
-        List<User> activeUsers = userRepository.findByIsDeletedFalse();
-        return activeUsers.stream()
-                .map(user -> {
-                    ManageUserDTO manageUserDTO = convertToManageUserDTO(user);
-                    manageUserDTO.setDeleted(false); 
-                    return manageUserDTO;
-                })
-                .collect(Collectors.toList());
+    public void save(UserDTO userDto) {
+        User user = modelMapper.map(userDto, User.class);
+        if (!userDto.getPassword().isEmpty()) {
+            String hashedPassword = BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt(10));
+            user.setPassword(hashedPassword);
+        }
+        userRepository.save(user);
+
+    }
+
+    @Override
+    public Iterable<UserDTO> findUser(String input) {
+        Iterable<User> users = userRepository.findAll();
+        List<UserDTO> userDTOS = new ArrayList<>();
+        for (User user : users) {
+            if (user.getUsername().contains(input)) {
+                userDTOS.add(modelMapper.map(user, UserDTO.class));
+            }
+        }
+        return userDTOS;
+    }
+
+    @Override
+    public ResetPasswordResponse resetPassword(ResetPasswordRequest resetPasswordRequest) {
+//        String username = resetPasswordRequest.getUsername();
+        String email = resetPasswordRequest.getEmail();
+        String newPassword = resetPasswordRequest.getNewPassword();
+        User user = userRepository.findByEmail(email);
+
+        if (user != null) {
+            user.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt(12)));
+            userRepository.save(user);
+            return new ResetPasswordResponse("Reset password successfully!", HttpStatus.OK);
+        } else {
+            throw new RuntimeException("Invalid email!");
+        }
+    }
+
+
+
+
+    @Override
+    public Page<ManageUserDTO> getActiveUsers(Pageable pageable) {
+        Page<User> activeUsersPage = userRepository.findByIsDeletedFalse(pageable);
+        return activeUsersPage.map(this::convertToManageUserDTO);
+    }
+    @Override
+    public Page<ManageUserDTO> getDeletedUsers(Pageable pageable) {
+        Page <User> deletedUsersPage = userRepository.findByIsDeletedTrue(pageable);
+        return deletedUsersPage.map(this::convertToManageUserDTO);
     }
 
 
     public void lockAccount(long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
         userOptional.ifPresent(user -> {
-            if (user.isActivated()) {
-                user.setActivated(false);
+
+            if (!user.isActivated()) {
+                user.setActivated(true);
                 userRepository.save(user);
             }
         });
@@ -127,8 +182,8 @@ public class UserServiceImpl implements UserService {
     public void unlockAccount(long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
         userOptional.ifPresent(user -> {
-            if (!user.isActivated()) {
-                user.setActivated(true);
+            if (user.isActivated()) {
+                user.setActivated(false);
                 userRepository.save(user);
             }
         });
@@ -143,4 +198,5 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 }
+
 
