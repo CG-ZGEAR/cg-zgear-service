@@ -1,6 +1,7 @@
 package com.codegym.cgzgearservice.entitiy.product;
 
 import com.codegym.cgzgearservice.constants.OrderStatus;
+import com.codegym.cgzgearservice.entitiy.user.Address;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,14 +27,15 @@ public class Order {
 
     private String customerEmail;
 
-    private String shippingAddress;
+    @OneToOne
+    private Address address;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    private LocalDateTime orderDate;
+    private String orderDate;
 
-    private LocalDateTime paymentDate;
+    private String paymentDate;
 
     private Double total;
 

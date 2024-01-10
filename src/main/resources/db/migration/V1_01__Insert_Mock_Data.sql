@@ -66,14 +66,20 @@ VALUES ('Nvidia GeForce RTX 3080', 699.99, 1, 0),
 
 
 INSERT INTO product_images (url, product_id)
-VALUES ('https://www.nvidia.com/content/dam/en-zz/Solutions/geforce/ampere/rtx-3080/images/design/geforce-rtx-3080-4-960.jpg', 1),
+VALUES ('https://www.nvidia.com/content/dam/en-zz/Solutions/geforce/ampere/rtx-3080/images/design/geforce-rtx-3080-4-960.jpg',
+        1),
        ('https://npcshop.vn/media/product/2607-samsung-odyssey-g9-gaming-49in-cong-1000r-240hz-8.jpeg', 2);
 
 -- For VGA
 INSERT INTO specification_templates (category_id, spec_key)
-VALUES (1, 'VRAM'),
+VALUES
+        (1, 'brand'),
+       (1, 'VRAM'),
        (1, 'Size'),
-       (1, 'Fans');
+       (1, 'Fans'),
+       (1, 'Clock Speed'),
+       (1, 'PC connection')
+;
 
 -- For Monitors
 INSERT INTO specification_templates (category_id, spec_key)
@@ -83,7 +89,11 @@ VALUES (2, 'Screen Size'),
 
 -- Specification templates for Laptop
 INSERT INTO specification_templates (category_id, spec_key)
-VALUES (3, 'CPU'), (3, 'RAM'), (3, 'Storage'), (3, 'Screen Size'), (3, 'Battery Life');
+VALUES (3, 'CPU'),
+       (3, 'RAM'),
+       (3, 'Storage'),
+       (3, 'Screen Size'),
+       (3, 'Battery Life');
 
 -- Specification templates for Gaming PC
 INSERT INTO specification_templates (category_id, spec_key)
@@ -123,16 +133,23 @@ VALUES (8, 'Material'),
 
 -- For Nvidia GeForce RTX 3080
 INSERT INTO product_details (product_id, description)
-VALUES (1, 'Can handle all games');
+VALUES (1, 'The GeForce RTXTM 3080 Ti and RTX 3080 graphics cards deliver the performance that gamers crave, powered by Ampere—NVIDIA’s 2nd gen RTX architecture. They are built with dedicated 2nd gen RT Cores and 3rd gen Tensor Cores, streaming multiprocessors, and G6X memory for an amazing gaming experience.
+
+');
+
 -- For Samsung Odyssey G9
 INSERT INTO product_details (product_id, description)
 VALUES (2, 'A gaming Monitor for gamers');
 
 -- For VGA
 INSERT INTO specifications (product_detail_id, template_id, spec_value)
-VALUES (1, 1, '10GB'),
-       (1, 2, '285mm'),
-       (1, 3, '2');
+VALUES (1, 1, 'Nvidia '),
+       (1, 2, '10GB'),
+       (1, 3, '285mm'),
+       (1, 4, '2'),
+       (1, 5, '1440 MHz'),
+       (1, 6, 'HDMI/DisplayPort')
+;
 
 -- For Monitors
 INSERT INTO specifications (product_detail_id, template_id, spec_value)
