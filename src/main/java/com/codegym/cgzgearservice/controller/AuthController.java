@@ -69,7 +69,7 @@ public class AuthController {
             return new ResponseEntity<>(new LoginResponse("Đăng nhập thành công!", roles,token), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(new LoginResponse("Đăng nhập thất bại!", null,false), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new LoginResponse("Đăng nhập thất bại!", null, null), HttpStatus.BAD_REQUEST);
         }
 
     }
