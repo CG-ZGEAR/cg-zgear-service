@@ -30,8 +30,10 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ProductDTO>> searchProducts(@RequestParam String searchTerm) {
-        List<ProductDTO> products = productService.searchProduct(searchTerm);
+    public ResponseEntity<Page<ProductDTO>> searchProducts(
+            @RequestParam String searchTerm,
+            @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<ProductDTO> products = productService.searchProduct(searchTerm, pageable);
         return ResponseEntity.ok(products);
     }
 
@@ -47,6 +49,13 @@ public class ProductController {
         ProductDTO productDTO = productService.getProductById(productId);
         return ResponseEntity.ok(productDTO);
     }
+
+    @GetMapping("/name/{productName}")
+    public ResponseEntity<ProductDTO> getProduct(@PathVariable String productName){
+        ProductDTO productDTO = productService.getProductByName(productName);
+        return ResponseEntity.ok(productDTO);
+    }
+
     @PutMapping("/{productId}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long productId, @RequestBody ProductDTO productDTO) {
         try {

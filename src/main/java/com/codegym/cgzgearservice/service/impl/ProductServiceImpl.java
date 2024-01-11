@@ -68,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> searchProduct(String searchTerm) {
+    public Page<ProductDTO> searchProduct(String searchTerm, Pageable pageable) {
         org.springframework.data.jpa.domain.Specification<Product> spec = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -89,9 +89,19 @@ public class ProductServiceImpl implements ProductService {
 
             return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
         };
-        return productRepository.findAll(spec).stream()
-                .map(this::convertToProductDTO)
-                .collect(Collectors.toList());
+        Page<Product> products = productRepository.findAll(spec, pageable);
+        return products.map(this::convertToProductDTO);
+    }
+
+    @Override
+    public ProductDTO getProductByName(String productName) {
+        if (!productRepository.findProductByProductName(productName).isPresent()) {
+            throw new ResourceNotFoundException("Product with id " + productName + " not found in database");
+        } else {
+            Product product = productRepository.findProductByProductName(productName).get();
+            ProductDTO productDTO = convertToProductDTO(product);
+            return productDTO;
+        }
     }
 
     @Override
