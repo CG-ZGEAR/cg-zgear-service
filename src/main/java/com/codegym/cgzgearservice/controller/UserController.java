@@ -4,6 +4,10 @@ import com.codegym.cgzgearservice.dto.ManageUserDTO;
 import com.codegym.cgzgearservice.dto.UserDTO;
 import com.codegym.cgzgearservice.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,15 +23,15 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping()
-    public ResponseEntity<List<ManageUserDTO>> getActiveUsers() {
-        List<ManageUserDTO> activeUsers = userService.getActiveUsers();
-        return new ResponseEntity<>(activeUsers, HttpStatus.OK);
-
+    public ResponseEntity<Page<ManageUserDTO>> getActiveUsers(@PageableDefault(page = 0, size = 5) Pageable pageable) {
+        Page<ManageUserDTO> activeUsersPage = userService.getActiveUsers(pageable);
+        return new ResponseEntity<>(activeUsersPage, HttpStatus.OK);
     }
+
     @GetMapping("/remove-user")
-    public ResponseEntity<List<ManageUserDTO>> getDeletedUsers() {
-        List<ManageUserDTO> deletedUsers = userService.getDeletedUsers();
-        return new ResponseEntity<>(deletedUsers, HttpStatus.OK);
+    public ResponseEntity<Page<ManageUserDTO>> getDeletedUsers(@PageableDefault(page = 0, size = 5) Pageable pageable) {
+        Page<ManageUserDTO> deletedUsersPage = userService.getDeletedUsers(pageable);
+        return new ResponseEntity<>(deletedUsersPage, HttpStatus.OK);
     }
     @PostMapping("/{userId}/lock")
     public ResponseEntity<String> lockUserAccount(@PathVariable long userId) {

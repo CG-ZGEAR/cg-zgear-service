@@ -23,8 +23,9 @@ public interface UserService {
     Iterable<UserDTO> findUser(String input);
     ResetPasswordResponse resetPassword(ResetPasswordRequest resetPasswordRequest);
 
-    List<ManageUserDTO> getDeletedUsers();
-    List<ManageUserDTO> getActiveUsers();
+    Page<ManageUserDTO> getDeletedUsers(Pageable pageable);
+    Page<ManageUserDTO> getActiveUsers(Pageable pageable);
+
     void lockAccount(long userId);
     void unlockAccount(long userId);
     }
