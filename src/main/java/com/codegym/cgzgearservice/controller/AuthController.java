@@ -6,6 +6,7 @@ import com.codegym.cgzgearservice.dto.payload.request.LoginRequestDTO;
 import com.codegym.cgzgearservice.dto.payload.response.LoginResponseDTO;
 import com.codegym.cgzgearservice.security.JwtTokenProvider;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,17 +25,12 @@ import java.util.stream.Collectors;
 
 @CrossOrigin(value = "*")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
-    @Autowired
-    JwtTokenProvider tokenProvider;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider tokenProvider;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginRequest) {

@@ -119,6 +119,12 @@ public class ProductServiceImpl implements ProductService {
         Page<Product> products = productRepository.findAll(pageable);
         return products.map(this::convertToProductDTO);
     }
+    @Override
+    public Page<ProductDTO> getProductsByCategory(String categoryName, Pageable pageable) {
+        Category category = categoryRepository.findByCategoryName(categoryName);
+        Page<Product> products= productRepository.findProductsByCategory(category, pageable);
+        return products.map(this::convertToProductDTO);
+    }
 
     private ProductDTO convertToProductDTO(Product product) {
         ProductDTO dto = modelMapper.map(product, ProductDTO.class);
