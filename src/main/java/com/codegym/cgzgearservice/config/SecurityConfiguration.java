@@ -69,7 +69,7 @@ public class SecurityConfiguration {
                 .disable();
         http
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/api/login",
+                        .requestMatchers("/api/auth/login",
                                 "/api/users/register",
                                 "/api/products",
                                 "/api/products/**",
