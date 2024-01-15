@@ -54,14 +54,10 @@ public class AuthController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             String token = tokenProvider.generateToken(authentication);
-            boolean isAdmin=false;
 
             List<String> roles = authentication.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toList());
-            if (roles.contains("ROLE_ADMIN")){
-                isAdmin=true;
-            }
             return new ResponseEntity<>(new LoginResponse("Đăng nhập thành công!", roles,token), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
