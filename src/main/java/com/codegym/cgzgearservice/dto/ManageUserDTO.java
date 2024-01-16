@@ -13,9 +13,8 @@ public class ManageUserDTO {
     private String gender;
     private String phoneNumber;
     private String avatar;
-    private boolean locked;
+    private boolean activated;
     private boolean isDeleted;
-
 
 }
 

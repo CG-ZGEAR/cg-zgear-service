@@ -109,14 +109,9 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new RuntimeException("User not found with ID: " + userId);
         }
-        }
-        @Override
-        public List<ManageUserDTO> getDeletedUsers() {
-            List<User> deletedUsers = userRepository.findByIsDeletedTrue();
-            return deletedUsers.stream()
-                    .map(this::convertToManageUserDTO)
-                    .collect(Collectors.toList());
-        }
+    }
+
+
 
     @Override
     public void save(UserDTO userDto) {
@@ -159,23 +154,23 @@ public class UserServiceImpl implements UserService {
 
 
 
-  
+
     @Override
-    public List<ManageUserDTO> getActiveUsers() {
-        List<User> activeUsers = userRepository.findByIsDeletedFalse();
-        return activeUsers.stream()
-                .map(user -> {
-                    ManageUserDTO manageUserDTO = convertToManageUserDTO(user);
-                    manageUserDTO.setDeleted(false); 
-                    return manageUserDTO;
-                })
-                .collect(Collectors.toList());
+    public Page<ManageUserDTO> getActiveUsers(Pageable pageable) {
+        Page<User> activeUsersPage = userRepository.findByIsDeletedFalse(pageable);
+        return activeUsersPage.map(this::convertToManageUserDTO);
+    }
+    @Override
+    public Page<ManageUserDTO> getDeletedUsers(Pageable pageable) {
+        Page <User> deletedUsersPage = userRepository.findByIsDeletedTrue(pageable);
+        return deletedUsersPage.map(this::convertToManageUserDTO);
     }
 
 
     public void lockAccount(long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
         userOptional.ifPresent(user -> {
+
             if (!user.isActivated()) {
                 user.setActivated(true);
                 userRepository.save(user);
@@ -203,4 +198,5 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 }
+
 
