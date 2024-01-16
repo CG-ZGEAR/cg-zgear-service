@@ -40,4 +40,7 @@ public class Product {
     @JsonIgnore
     private List<ProductImage> productImages;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Review> reviews;
 }

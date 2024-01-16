@@ -1,13 +1,13 @@
 package com.codegym.cgzgearservice.service.impl;
 
 import com.codegym.cgzgearservice.dto.ProductDTO;
+import com.codegym.cgzgearservice.dto.ReviewDTO;
 import com.codegym.cgzgearservice.dto.SpecificationDTO;
 import com.codegym.cgzgearservice.entitiy.product.*;
+import com.codegym.cgzgearservice.entitiy.user.User;
+import com.codegym.cgzgearservice.exception.ProductNotFoundException;
 import com.codegym.cgzgearservice.exception.ResourceNotFoundException;
-import com.codegym.cgzgearservice.repository.CategoryRepository;
-import com.codegym.cgzgearservice.repository.ProductDetailRepository;
-import com.codegym.cgzgearservice.repository.ProductRepository;
-import com.codegym.cgzgearservice.repository.SpecificationTemplateRepository;
+import com.codegym.cgzgearservice.repository.*;
 import com.codegym.cgzgearservice.service.ProductService;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
@@ -17,7 +17,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,6 +33,7 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepository;
     private final ProductDetailRepository productDetailRepository;
     private final SpecificationTemplateRepository specificationTemplateRepository;
+    private final UserRepository userService;
 
     @Override
     public ProductDTO createProduct(ProductDTO productDTO) {
@@ -103,6 +107,7 @@ public class ProductServiceImpl implements ProductService {
             return productDTO;
         }
     }
+
 
     @Override
     public ProductDTO getProductById(Long productId) {
@@ -224,6 +229,44 @@ public class ProductServiceImpl implements ProductService {
         productDetail.setDescription(productDTO.getDescription());
 
         productDetailRepository.save(productDetail);
+    }
+
+    private List<ReviewDTO> getReviewsForProduct(Product product) {
+        return product.getReviews().stream()
+                .map(this::convertToReviewDTO)
+                .collect(Collectors.toList());
+    }
+
+    private ReviewDTO convertToReviewDTO(Review review) {
+        ReviewDTO dto = modelMapper.map(review, ReviewDTO.class);
+        return dto;
+    }
+
+    @Override
+    @Transactional
+    public ReviewDTO addReview(Long productId, ReviewDTO reviewDTO, Principal principal) {
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (optionalProduct.isPresent()) {
+            Product product = optionalProduct.get();
+
+            // Lấy thông tin người dùng từ Principal
+            User user = userService.findUserByUsername(principal.getName());
+
+            Review review = new Review();
+            review.setRating(reviewDTO.getRating());
+            review.setComment(reviewDTO.getComment());
+            review.setCreatedAt(LocalDateTime.now());
+            review.setUser(user); // Thiết lập người dùng đánh giá
+            review.setProduct(product);
+
+            product.getReviews().add(review);
+            productRepository.save(product);
+
+
+            return modelMapper.map(review, ReviewDTO.class);
+        } else {
+            throw new ProductNotFoundException("Product not found");
+        }
     }
 
 }
