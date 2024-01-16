@@ -1,10 +1,12 @@
 package com.codegym.cgzgearservice.service;
 
 import com.codegym.cgzgearservice.dto.ProductDTO;
+import com.codegym.cgzgearservice.dto.ReviewDTO;
 import com.codegym.cgzgearservice.entitiy.product.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface ProductService {
@@ -17,4 +19,5 @@ public interface ProductService {
     Page<ProductDTO> searchProduct(String searchTerm, Pageable pageable);
 
     ProductDTO getProductByName(String productName);
+    ReviewDTO addReview(Long productId, ReviewDTO reviewDTO, Principal principal);
 }
