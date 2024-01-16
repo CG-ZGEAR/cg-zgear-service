@@ -20,14 +20,7 @@ public class LoginResponse {
         super();
     }
 
-    public LoginResponse(String message, @Nullable String token,List<String> roles) {
-        this.message = message;
-        this.roles = roles;
-        this.token = token;
-    }
 
-    public LoginResponse(String message, String token, boolean isAdmin) {
-    }
 
     public String getMessage() {
         return message;
