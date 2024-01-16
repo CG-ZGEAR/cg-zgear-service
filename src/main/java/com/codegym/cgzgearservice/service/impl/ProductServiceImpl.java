@@ -80,16 +80,16 @@ public class ProductServiceImpl implements ProductService {
             Predicate namePredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("productName")), "%" + searchTerm.toLowerCase() + "%");
             predicates.add(namePredicate);
 
-            // Join to access specification values
-            Join<Product, ProductDetail> productDetailJoin = root.join("productDetail", JoinType.LEFT);
-            Join<ProductDetail, Specification> specificationJoin = productDetailJoin.join("specifications", JoinType.LEFT);
-
-            // Predicate for specification values
-            Predicate specValuePredicate = criteriaBuilder.like(
-                    criteriaBuilder.lower(specificationJoin.get("specValue")),
-                    "%" + searchTerm.toLowerCase() + "%"
-            );
-            predicates.add(specValuePredicate);
+//            // Join to access specification values
+//            Join<Product, ProductDetail> productDetailJoin = root.join("productDetail", JoinType.LEFT);
+//            Join<ProductDetail, Specification> specificationJoin = productDetailJoin.join("specifications", JoinType.LEFT);
+//
+//            // Predicate for specification values
+//            Predicate specValuePredicate = criteriaBuilder.like(
+//                    criteriaBuilder.lower(specificationJoin.get("specValue")),
+//                    "%" + searchTerm.toLowerCase() + "%"
+//            );
+//            predicates.add(specValuePredicate);
 
             return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
         };
