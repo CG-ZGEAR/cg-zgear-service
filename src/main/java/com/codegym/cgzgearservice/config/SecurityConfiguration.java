@@ -54,10 +54,12 @@ public class SecurityConfiguration {
         source.registerCorsConfiguration("/**", corsConfig);
         return source;
     }
+
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class).build();
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors()
@@ -67,7 +69,12 @@ public class SecurityConfiguration {
                 .disable();
         http
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/api/login","/api/users/register","/api/products","/api/products/**").permitAll()
+                        .requestMatchers("/api/auth/login",
+                                "/api/users/register",
+                                "/api/products",
+                                "/api/products/**",
+                                "/api/categories/**"
+                        ).permitAll()
                         .requestMatchers("/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 );
