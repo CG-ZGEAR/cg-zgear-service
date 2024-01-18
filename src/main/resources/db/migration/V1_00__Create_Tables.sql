@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS orders (
 
 -- Coupons
 CREATE TABLE coupons (
-                         id INT PRIMARY KEY AUTO_INCREMENT,
+                         id BIGINT PRIMARY KEY AUTO_INCREMENT,
                          code VARCHAR(50) UNIQUE,
                          discount_type ENUM('PERCENT', 'FIXED_AMOUNT'),
                          discount_amount DOUBLE(10,2),
@@ -121,7 +121,7 @@ CREATE TABLE coupons (
 
 -- Product discounts
 CREATE TABLE product_discounts (
-                                   id INT PRIMARY KEY AUTO_INCREMENT,
+                                   id BIGINT PRIMARY KEY AUTO_INCREMENT,
                                    product_id BIGINT,
                                    discount_type ENUM('PERCENT', 'FIXED_AMOUNT'),
                                    discount_amount DOUBLE(10,2),
@@ -129,13 +129,4 @@ CREATE TABLE product_discounts (
                                    end_date DATE,
                                    active BOOLEAN DEFAULT TRUE,
                                    FOREIGN KEY (product_id) REFERENCES products(id)
-);
-
---  discounts
-CREATE TABLE discount_coupons (
-                                  discount_id INT,
-                                  coupon_id INT,
-                                  PRIMARY KEY (discount_id, coupon_id),
-                                  FOREIGN KEY (discount_id) REFERENCES product_discounts(id),
-                                  FOREIGN KEY (coupon_id) REFERENCES coupons(id)
 );

@@ -14,4 +14,6 @@ public class ProductDTO {
     private List<String> imageUrls;
     private List<SpecificationDTO> specifications;
     private List<ReviewDTO> reviews;
+    private List<ProductDiscountDTO> discounts;
+
 }
