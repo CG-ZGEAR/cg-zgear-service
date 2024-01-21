@@ -60,14 +60,15 @@ VALUES ('VGA'),
        ('Headset'),
        ('Gaming Chair');
 
-INSERT INTO products (product_name, price, category_id, is_deleted)
-VALUES ('Nvidia GeForce RTX 3080', 699.99, 1, 0),
-       ('Samsung Odyssey G9', 1299.99, 2, 0);
+INSERT INTO products (product_name, price, category_id, available)
+VALUES ('Nvidia GeForce RTX 3080', 699.99, 1, 1),
+       ('Samsung Odyssey G9', 1299.99, 2,1) ;
 
 
 INSERT INTO product_images (url, product_id)
 VALUES ('https://www.nvidia.com/content/dam/en-zz/Solutions/geforce/ampere/rtx-3080/images/design/geforce-rtx-3080-4-960.jpg',
         1),
+    ('https://hanoicomputercdn.com/media/product/61757_card_man_hinh_msi_rtx_3080_ventus_3x_plus_10g_oc_lhr_1.jpg', 1),
        ('https://npcshop.vn/media/product/2607-samsung-odyssey-g9-gaming-49in-cong-1000r-240hz-8.jpeg', 2);
 
 -- For VGA
@@ -157,14 +158,11 @@ VALUES (2, 4, '49 inch'),
        (2, 5, '240Hz'),
        (2, 6, 'QLED');
 
-INSERT INTO carts (user_id, cart_status, is_deleted)
-VALUES (1, 'Active', 0),
-       (2, 'Active', 0);
+INSERT INTO carts (user_id)
+VALUES (1);
 
-INSERT INTO cartlines (cart_id, product_id, quantity)
-VALUES (1, 1, 1),
-       (2, 2, 1);
+INSERT INTO cart_items (cart_id, product_id, quantity)
+VALUES (1, 1, 1);
 
 INSERT INTO orders (status, cart_id, date_created, total)
-VALUES ('Processed', 1, NOW(), 699.99),
-       ('Shipped', 2, NOW(), 1299.99);
+VALUES ('Processed', 1, NOW(), 699.99);

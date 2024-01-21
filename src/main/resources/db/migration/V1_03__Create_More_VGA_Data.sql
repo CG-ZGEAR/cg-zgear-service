@@ -1,9 +1,9 @@
 -- Inserting more VGA products
-INSERT INTO products (product_name, price, category_id, is_deleted)
+INSERT INTO products (product_name, price, category_id, available)
 VALUES
-    ('AMD Radeon RX 6800 XT', 649.99, 1, 0),
-    ('Asus ROG Strix RTX 2070', 499.99, 1, 0),
-    ('Gigabyte GeForce GTX 1660 Ti', 279.99, 1, 0);
+    ('AMD Radeon RX 6800 XT', 649.99, 1, 1),
+    ('Asus ROG Strix RTX 2070', 499.99, 1, 1),
+    ('Gigabyte GeForce GTX 1660 Ti', 279.99, 1, 1);
 
 -- Get newly added product IDs
 SET @rx6800xtId = LAST_INSERT_ID();

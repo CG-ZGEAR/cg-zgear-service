@@ -27,7 +27,7 @@ public class Review {
     @Column(name = "comment", length = 255)
     private String comment;
 
-    @Column(name = "createdAt")
+    @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
 

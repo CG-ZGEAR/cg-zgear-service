@@ -28,4 +28,5 @@ public interface UserService {
 
     void lockAccount(long userId);
     void unlockAccount(long userId);
+
     }

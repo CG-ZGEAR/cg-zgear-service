@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -26,8 +27,8 @@ public class Product {
     @Column(name = "price", nullable = false)
     private Double price;
 
-    @Column(name = "is_deleted", nullable = false, columnDefinition = "BIT default false")
-    private Boolean isDeleted;
+    @Column(name = "available", nullable = false, columnDefinition = "BIT default false")
+    private Boolean available;
 
     @OneToOne(mappedBy = "product",fetch = FetchType.EAGER)
     private ProductDetail productDetail;
@@ -43,4 +44,9 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Review> reviews;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<ProductDiscount> discounts;
+
 }
