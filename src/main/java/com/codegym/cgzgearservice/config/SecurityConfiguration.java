@@ -77,6 +77,7 @@ public class SecurityConfiguration {
                         ).permitAll()
                         .requestMatchers("/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
+
                 );
 
 

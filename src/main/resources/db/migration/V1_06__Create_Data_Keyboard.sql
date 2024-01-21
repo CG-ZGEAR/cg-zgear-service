@@ -1,9 +1,9 @@
 -- Inserting more Keyboard products
-INSERT INTO products (product_name, price, category_id, is_deleted)
+INSERT INTO products (product_name, price, category_id, available)
 VALUES
-    ('Logitech MX Keys', 99.99, 5, 0),
-    ('Razer BlackWidow V3', 139.99, 5, 0),
-    ('Corsair K95 RGB Platinum', 199.99, 5, 0);
+    ('Logitech MX Keys', 99.99, 5, 1),
+    ('Razer BlackWidow V3', 139.99, 5, 1),
+    ('Corsair K95 RGB Platinum', 199.99, 5, 1);
 
 -- Get newly added product IDs
 SET @logitechId = LAST_INSERT_ID();

@@ -60,9 +60,9 @@ VALUES ('VGA'),
        ('Headset'),
        ('Gaming Chair');
 
-INSERT INTO products (product_name, price, category_id, is_deleted)
-VALUES ('Nvidia GeForce RTX 3080', 699.99, 1, 0),
-       ('Samsung Odyssey G9', 1299.99, 2, 0);
+INSERT INTO products (product_name, price, category_id, available)
+VALUES ('Nvidia GeForce RTX 3080', 699.99, 1, 1),
+       ('Samsung Odyssey G9', 1299.99, 2,1) ;
 
 
 INSERT INTO product_images (url, product_id)
@@ -158,14 +158,11 @@ VALUES (2, 4, '49 inch'),
        (2, 5, '240Hz'),
        (2, 6, 'QLED');
 
-INSERT INTO carts (user_id, cart_status, is_deleted)
-VALUES (1, 'Active', 0),
-       (2, 'Active', 0);
+INSERT INTO carts (user_id)
+VALUES (1);
 
-INSERT INTO cartlines (cart_id, product_id, quantity)
-VALUES (1, 1, 1),
-       (2, 2, 1);
+INSERT INTO cart_items (cart_id, product_id, quantity)
+VALUES (1, 1, 1);
 
 INSERT INTO orders (status, cart_id, date_created, total)
-VALUES ('Processed', 1, NOW(), 699.99),
-       ('Shipped', 2, NOW(), 1299.99);
+VALUES ('Processed', 1, NOW(), 699.99);
