@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS products (
                                         product_name VARCHAR(255),
     price DOUBLE(10,2),
     category_id BIGINT NOT NULL,
-    is_deleted BIT DEFAULT 0,
+    available BIT DEFAULT 1,
     CONSTRAINT category_id_fk FOREIGN KEY (category_id) REFERENCES categories (id)
     );
 
@@ -85,12 +85,10 @@ CREATE TABLE IF NOT EXISTS specifications (
 CREATE TABLE IF NOT EXISTS carts (
                                      id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
                                      user_id BIGINT NOT NULL,
-                                     cart_status VARCHAR(45),
-    is_deleted BIT DEFAULT 0,
-    FOREIGN KEY (user_id) REFERENCES users (id)
+                FOREIGN KEY (user_id) REFERENCES users (id)
     );
 
-CREATE TABLE IF NOT EXISTS cartlines (
+CREATE TABLE IF NOT EXISTS cart_items (
                                          id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
                                          cart_id BIGINT NOT NULL,
                                          product_id BIGINT NOT NULL,

@@ -1,9 +1,9 @@
 -- Inserting Gaming Chair products
-INSERT INTO products (product_name, price, category_id, is_deleted)
+INSERT INTO products (product_name, price, category_id, available)
 VALUES
-    ('DXRacer Formula Series Gaming Chair', 299.99, 8, 0),
-    ('Secretlab Omega Series Gaming Chair', 349.99, 8, 0),
-    ('AKRacing Masters Series Pro Gaming Chair', 379.99, 8, 0);
+    ('DXRacer Formula Series Gaming Chair', 299.99, 8, 1),
+    ('Secretlab Omega Series Gaming Chair', 349.99, 8, 1),
+    ('AKRacing Masters Series Pro Gaming Chair', 379.99, 8, 1);
 
 -- Get newly added product IDs
 SET @dxracerChairId = LAST_INSERT_ID();
