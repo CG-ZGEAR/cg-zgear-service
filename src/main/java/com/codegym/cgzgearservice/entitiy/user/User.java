@@ -1,5 +1,6 @@
 package com.codegym.cgzgearservice.entitiy.user;
 
+import com.codegym.cgzgearservice.entitiy.product.Review;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -67,5 +68,8 @@ public class User {
     @JsonIgnore
     List<Address> address;
 
+    @OneToMany(mappedBy ="user")
+    @JsonIgnore
+    List<Review> reviews;
 }
 

@@ -1,6 +1,7 @@
 package com.codegym.cgzgearservice.controller;
 
 import com.codegym.cgzgearservice.dto.ProductDTO;
+import com.codegym.cgzgearservice.dto.ReviewDTO;
 import com.codegym.cgzgearservice.entitiy.product.Product;
 import com.codegym.cgzgearservice.exception.ResourceNotFoundException;
 import com.codegym.cgzgearservice.service.ProductService;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -22,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
+
     @GetMapping
     public ResponseEntity<Page<ProductDTO>> getAllProducts(
             @PageableDefault(size = 12, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
@@ -39,19 +42,19 @@ public class ProductController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<?> createOneProduct(@RequestBody ProductDTO productDTO){
+    public ResponseEntity<?> createOneProduct(@RequestBody ProductDTO productDTO) {
         ProductDTO createdProduct = productService.createProduct(productDTO);
         return ResponseEntity.ok(createdProduct);
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductDTO> getProduct(@PathVariable Long productId){
+    public ResponseEntity<ProductDTO> getProduct(@PathVariable Long productId) {
         ProductDTO productDTO = productService.getProductById(productId);
         return ResponseEntity.ok(productDTO);
     }
 
     @GetMapping("/name/{productName}")
-    public ResponseEntity<ProductDTO> getProduct(@PathVariable String productName){
+    public ResponseEntity<ProductDTO> getProduct(@PathVariable String productName) {
         ProductDTO productDTO = productService.getProductByName(productName);
         return ResponseEntity.ok(productDTO);
     }
@@ -70,7 +73,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<?> deleteProduct(@PathVariable Long productId){
+    public ResponseEntity<?> deleteProduct(@PathVariable Long productId) {
         try {
             productService.deleteProduct(productId);
             return ResponseEntity.noContent().build();
@@ -79,6 +82,12 @@ public class ProductController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @PostMapping("/{productId}/reviews")
+    public ResponseEntity<ReviewDTO> addReview(@PathVariable Long productId, @RequestBody ReviewDTO reviewDTO, Principal principal) {
+        ReviewDTO addedReview = productService.addReview(productId, reviewDTO, principal);
+        return ResponseEntity.ok(addedReview);
     }
 
 

@@ -14,6 +14,7 @@ import com.codegym.cgzgearservice.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,17 +34,12 @@ import java.util.stream.Collectors;
 
 @CrossOrigin(value = "*")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
-    @Autowired
-    JwtTokenProvider tokenProvider;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider tokenProvider;
 
     @Autowired
     private UserService userService;
@@ -58,18 +54,14 @@ public class AuthController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             String token = tokenProvider.generateToken(authentication);
-            boolean isAdmin=false;
 
             List<String> roles = authentication.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toList());
-            if (roles.contains("ROLE_ADMIN")){
-                isAdmin=true;
-            }
             return new ResponseEntity<>(new LoginResponse("Đăng nhập thành công!", roles,token), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(new LoginResponse("Đăng nhập thất bại!", null,false), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new LoginResponse("Đăng nhập thất bại!", null, null), HttpStatus.BAD_REQUEST);
         }
 
     }
