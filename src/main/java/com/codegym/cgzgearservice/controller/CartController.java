@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/carts")
 @RequiredArgsConstructor
-@Secured("ROLE_USER")
 public class CartController {
 
     private final CartService cartService;
@@ -27,7 +26,16 @@ public class CartController {
 
         com.codegym.cgzgearservice.entitiy.user.User user = userRepository.findUserByUsername(authUser.getUsername());
         CartDTO cartDTO = cartService.addToCart(user, productId, quantity);
-
         return ResponseEntity.ok(cartDTO);
+    }
+
+    @GetMapping()
+    public ResponseEntity<CartDTO> getCart(
+            @AuthenticationPrincipal User authUser) {
+
+        com.codegym.cgzgearservice.entitiy.user.User user = userRepository.findUserByUsername(authUser.getUsername());
+        CartDTO cartDTO = cartService.getCart(user);
+        return ResponseEntity.ok(cartDTO);
+
     }
 }

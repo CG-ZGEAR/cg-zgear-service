@@ -73,9 +73,9 @@ public class SecurityConfiguration {
                                 "/api/users/register",
                                 "/api/products",
                                 "/api/products/**",
-                                "/api/categories/**"
+                                "/api/categories/**",
+                                "/api/carts/**"
                         ).permitAll()
-                        .requestMatchers("/api/carts/**").hasRole("USER")
                         .requestMatchers("/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
 

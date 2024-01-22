@@ -59,6 +59,11 @@ public class CartServiceImpl implements CartService {
         return cartDTO;
     }
 
+    @Override
+    public CartDTO getCart(User user) {
+        return null;
+    }
+
     private Double getPriceForCartItem(Product product, int quantity) {
         List<ProductDiscount> discounts = productDiscountService.getCurrentDiscountsForProduct(product.getId());
         Double price = product.getPrice();

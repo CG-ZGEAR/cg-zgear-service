@@ -6,4 +6,6 @@ import com.codegym.cgzgearservice.entitiy.user.User;
 
 public interface CartService {
     CartDTO addToCart(User user, Long productId, int quantity);
+
+    CartDTO getCart(User user);
 }
