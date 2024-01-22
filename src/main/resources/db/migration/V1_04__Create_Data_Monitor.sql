@@ -1,9 +1,9 @@
 -- Inserting more Monitor products
-INSERT INTO products (product_name, price, category_id, is_deleted)
+INSERT INTO products (product_name, price, category_id, available)
 VALUES
-    ('LG UltraGear 27GL850', 449.99, 2, 0),
-    ('Acer Predator XB273K', 829.99, 2, 0),
-    ('Dell S3220DGF', 399.99, 2, 0);
+    ('LG UltraGear 27GL850', 449.99, 2, 1),
+    ('Acer Predator XB273K', 829.99, 2, 1),
+    ('Dell S3220DGF', 399.99, 2, 1);
 
 -- Get newly added product IDs
 SET @lgUltraGearId = LAST_INSERT_ID();
