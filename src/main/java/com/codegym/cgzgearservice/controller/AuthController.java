@@ -88,7 +88,13 @@ public class AuthController {
 
     @PostMapping("reset-password/verify-otp")
     public ResponseEntity<String> verifyOtpAndResetPassword(
-            @RequestBody VerifyOtpRequest verifyOtpRequest) {
+            @RequestParam String email,
+            @RequestParam String otp,
+            @RequestParam String newPassword) {
+        VerifyOtpRequest verifyOtpRequest = new VerifyOtpRequest();
+        verifyOtpRequest.setEmail(email);
+        verifyOtpRequest.setOtp(otp);
+        verifyOtpRequest.setNewPassword(newPassword);
 
         forgotPasswordService.verifyOtpAndResetPassword(verifyOtpRequest);
         return ResponseEntity.ok("Password reset successfully.");
