@@ -3,7 +3,7 @@ package com.codegym.cgzgearservice.service;
 
 import com.codegym.cgzgearservice.dto.ManageUserDTO;
 import com.codegym.cgzgearservice.dto.UserDTO;
-import com.codegym.cgzgearservice.dto.payload.request.ResetPasswordRequest;
+import com.codegym.cgzgearservice.dto.payload.request.*;
 import com.codegym.cgzgearservice.dto.payload.response.ResetPasswordResponse;
 import com.codegym.cgzgearservice.entitiy.user.User;
 import org.springframework.data.domain.Page;
@@ -21,11 +21,12 @@ public interface UserService {
     void DeleteUserById(Long userId);
     void save(UserDTO userDto);
     Iterable<UserDTO> findUser(String input);
-    ResetPasswordResponse resetPassword(ResetPasswordRequest resetPasswordRequest);
 
     Page<ManageUserDTO> getDeletedUsers(Pageable pageable);
     Page<ManageUserDTO> getActiveUsers(Pageable pageable);
 
     void lockAccount(long userId);
     void unlockAccount(long userId);
+
+
     }

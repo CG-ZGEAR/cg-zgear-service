@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -55,6 +56,12 @@ public class User {
 
     @Column(name = "is_deleted",nullable = false,  columnDefinition = "BIT default true" )
     private boolean isDeleted;
+
+    @Column(name = "otp_code", length = 6)
+    private String otpCode;
+
+    @Column(name = "otpexpiration")
+    private LocalDateTime otpExpiration;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

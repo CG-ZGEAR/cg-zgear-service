@@ -15,6 +15,8 @@ CREATE TABLE IF NOT EXISTS users (
     gender VARCHAR(10),
     activated BIT DEFAULT 0,
     is_deleted BIT DEFAULT 0,
+    otp_code VARCHAR(10),
+    otpExpiration DATETIME,
     CONSTRAINT users_uk UNIQUE (username, email, phone_number)
     );
 
