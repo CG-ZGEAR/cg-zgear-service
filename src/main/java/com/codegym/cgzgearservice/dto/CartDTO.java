@@ -13,4 +13,10 @@ public class CartDTO {
     private List<CartItemDTO> cartItems;
     private double totalPrice;
 
+    public double getTotalPrice() {
+        for (CartItemDTO cartItemDTO : cartItems) {
+            totalPrice += cartItemDTO.getPrice();
+        }
+        return totalPrice;
+    }
 }

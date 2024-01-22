@@ -93,6 +93,7 @@ CREATE TABLE IF NOT EXISTS cart_items (
                                          cart_id BIGINT NOT NULL,
                                          product_id BIGINT NOT NULL,
                                          quantity INT,
+                                         price DOUBLE,
                                          FOREIGN KEY (cart_id) REFERENCES carts (id),
     FOREIGN KEY (product_id) REFERENCES products (id)
     );

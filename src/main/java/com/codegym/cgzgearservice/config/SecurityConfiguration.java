@@ -75,6 +75,7 @@ public class SecurityConfiguration {
                                 "/api/products/**",
                                 "/api/categories/**"
                         ).permitAll()
+                        .requestMatchers("/api/carts/**").hasRole("USER")
                         .requestMatchers("/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
 
