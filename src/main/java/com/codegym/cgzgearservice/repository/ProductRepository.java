@@ -12,6 +12,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
-    Optional<Product> findProductByProductName(String productName);
-    Page<Product> findProductsByCategory(Category category, Pageable pageable);
+    Optional<Product> findProductByProductNameAndAvailableIsTrue(String productName);
+
+    Page<Product> findProductsByCategoryAndAvailableIsTrue(Category category, Pageable pageable);
+
+    @Query("SELECT p FROM Product p WHERE p.available = true")
+    Page<Product> findAllAvailable(Pageable pageable);
+    Product findProductByIdAndAvailableIsTrue(Long id);
 }
