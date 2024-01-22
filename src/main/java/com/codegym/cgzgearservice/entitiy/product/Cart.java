@@ -8,12 +8,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 @Entity
 @Table(name = "carts")
-@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
@@ -22,9 +22,6 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "cart_status")
-    private String cartStatus;
-
     @OneToMany(mappedBy = "cart")
     @JsonIgnore
     private List<CartItem> cartItems;
@@ -32,4 +29,8 @@ public class Cart {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = true)
     private User user;
+
+    public Cart() {
+        this.cartItems = new ArrayList<>();
+    }
 }

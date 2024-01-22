@@ -1,9 +1,9 @@
 -- Inserting Mouse products
-INSERT INTO products (product_name, price, category_id, is_deleted)
+INSERT INTO products (product_name, price, category_id, available)
 VALUES
-    ('Logitech G Pro X Superlight Wireless Gaming Mouse', 149.99, 6, 0),
-    ('Razer DeathAdder Elite Gaming Mouse', 69.99, 6, 0),
-    ('SteelSeries Rival 600 Gaming Mouse', 79.99, 6, 0);
+    ('Logitech G Pro X Superlight Wireless Gaming Mouse', 149.99, 6, 1),
+    ('Razer DeathAdder Elite Gaming Mouse', 69.99, 6, 1),
+    ('SteelSeries Rival 600 Gaming Mouse', 79.99, 6, 1);
 
 -- Get newly added product IDs
 SET @logitechMouseId = LAST_INSERT_ID();

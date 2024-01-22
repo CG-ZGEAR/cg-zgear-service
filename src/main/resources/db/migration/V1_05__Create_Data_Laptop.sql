@@ -1,9 +1,9 @@
 -- Inserting more Laptop products
-INSERT INTO products (product_name, price, category_id, is_deleted)
+INSERT INTO products (product_name, price, category_id, available)
 VALUES
-    ('Apple MacBook Pro', 1999.99, 3, 0),
-    ('Dell XPS 15', 1499.99, 3, 0),
-    ('HP Spectre x360', 1349.99, 3, 0);
+    ('Apple MacBook Pro', 1999.99, 3, 1),
+    ('Dell XPS 15', 1499.99, 3, 1),
+    ('HP Spectre x360', 1349.99, 3, 1);
 
 -- Get newly added product IDs
 SET @macBookProId = LAST_INSERT_ID();

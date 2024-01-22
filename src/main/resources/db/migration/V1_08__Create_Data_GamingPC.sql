@@ -1,9 +1,9 @@
 -- Inserting Gaming PC products
-INSERT INTO products (product_name, price, category_id, is_deleted)
+INSERT INTO products (product_name, price, category_id, available)
 VALUES
-    ('Custom Gaming PC Intel Core i7, RTX 3080, 16GB RAM, 1TB SSD', 2299.99, 4, 0),
-    ('Gaming PC AMD Ryzen 9, RX 6800 XT, 32GB RAM, 2TB HDD + 1TB SSD', 2799.99, 4, 0),
-    ('Alienware Aurora R10 Gaming Desktop Ryzen 7, RTX 3070, 16GB RAM, 512GB SSD', 1899.99, 4, 0);
+    ('Custom Gaming PC Intel Core i7, RTX 3080, 16GB RAM, 1TB SSD', 2299.99, 4, 1),
+    ('Gaming PC AMD Ryzen 9, RX 6800 XT, 32GB RAM, 2TB HDD + 1TB SSD', 2799.99, 4, 1),
+    ('Alienware Aurora R10 Gaming Desktop Ryzen 7, RTX 3070, 16GB RAM, 512GB SSD', 1899.99, 4, 1);
 
 -- Get newly added product IDs
 SET @customPCId = LAST_INSERT_ID();

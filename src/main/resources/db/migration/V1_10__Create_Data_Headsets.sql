@@ -1,9 +1,9 @@
 -- Inserting Headset products
-INSERT INTO products (product_name, price, category_id, is_deleted)
+INSERT INTO products (product_name, price, category_id, available)
 VALUES
-    ('HyperX Cloud II Gaming Headset', 99.99, 7, 0),
-    ('Logitech G Pro X Gaming Headset', 129.99, 7, 0),
-    ('SteelSeries Arctis 7 Wireless Gaming Headset', 149.99, 7, 0);
+    ('HyperX Cloud II Gaming Headset', 99.99, 7, 1),
+    ('Logitech G Pro X Gaming Headset', 129.99, 7, 1),
+    ('SteelSeries Arctis 7 Wireless Gaming Headset', 149.99, 7, 1);
 
 -- Get newly added product IDs
 SET @hyperXHeadsetId = LAST_INSERT_ID();

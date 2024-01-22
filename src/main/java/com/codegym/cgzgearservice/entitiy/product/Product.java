@@ -27,8 +27,8 @@ public class Product {
     @Column(name = "price", nullable = false)
     private Double price;
 
-    @Column(name = "is_deleted", nullable = false, columnDefinition = "BIT default false")
-    private Boolean isDeleted;
+    @Column(name = "available", nullable = false, columnDefinition = "BIT default false")
+    private Boolean available;
 
     @OneToOne(mappedBy = "product",fetch = FetchType.EAGER)
     private ProductDetail productDetail;

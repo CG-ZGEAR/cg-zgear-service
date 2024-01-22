@@ -14,7 +14,6 @@ import com.codegym.cgzgearservice.service.ProductService;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -42,11 +41,12 @@ public class ProductServiceImpl implements ProductService {
         Product product = new Product();
         modelMapper.map(productDTO, product);
         createProductImages(product, productDTO.getImageUrls());
-        product.setIsDeleted(false);
+        product.setAvailable(true);
         product = productRepository.save(product);
         createProductSpecifications(product, productDTO);
         return productDTO;
     }
+
     @Override
     public ProductDTO updateProduct(Long productId, ProductDTO productDTO) {
         Product product = productRepository.findById(productId)
@@ -66,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
             throw new ResourceNotFoundException("Product with id " + productId + " not found in database");
         } else {
             Product product = productRepository.findById(productId).get();
-            product.setIsDeleted(true);
+            product.setAvailable(false);
             productRepository.save(product);
             ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
             return productDTO;
@@ -89,10 +89,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO getProductByName(String productName) {
-        if (!productRepository.findProductByProductName(productName).isPresent()) {
+        if (!productRepository.findProductByProductNameAndAvailableIsTrue(productName).isPresent()) {
             throw new ResourceNotFoundException("Product with id " + productName + " not found in database");
         } else {
-            Product product = productRepository.findProductByProductName(productName).get();
+            Product product = productRepository.findProductByProductNameAndAvailableIsTrue(productName).get();
             ProductDTO productDTO = convertToProductDTO(product);
             return productDTO;
         }
@@ -109,15 +109,17 @@ public class ProductServiceImpl implements ProductService {
             return productDTO;
         }
     }
+
     @Override
     public Page<ProductDTO> getAllProducts(Pageable pageable) {
-        Page<Product> products = productRepository.findAll(pageable);
+        Page<Product> products = productRepository.findAllAvailable(pageable);
         return products.map(this::convertToProductDTO);
     }
+
     @Override
     public Page<ProductDTO> getProductsByCategory(String categoryName, Pageable pageable) {
         Category category = categoryRepository.findByCategoryName(categoryName);
-        Page<Product> products= productRepository.findProductsByCategory(category, pageable);
+        Page<Product> products = productRepository.findProductsByCategoryAndAvailableIsTrue(category, pageable);
         return products.map(this::convertToProductDTO);
     }
 
@@ -260,7 +262,6 @@ public class ProductServiceImpl implements ProductService {
 
             product.getReviews().add(review);
             productRepository.save(product);
-
 
             return modelMapper.map(review, ReviewDTO.class);
         } else {
