@@ -3,8 +3,6 @@ package com.codegym.cgzgearservice.service.impl;
 
 import com.codegym.cgzgearservice.dto.ManageUserDTO;
 import com.codegym.cgzgearservice.dto.UserDTO;
-import com.codegym.cgzgearservice.dto.payload.request.ResetPasswordRequest;
-import com.codegym.cgzgearservice.dto.payload.response.ResetPasswordResponse;
 import com.codegym.cgzgearservice.entitiy.user.Role;
 import com.codegym.cgzgearservice.entitiy.user.User;
 import com.codegym.cgzgearservice.repository.RoleRepository;
@@ -16,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
@@ -136,26 +133,7 @@ public class UserServiceImpl implements UserService {
         return userDTOS;
     }
 
-    @Override
-    public ResetPasswordResponse resetPassword(ResetPasswordRequest resetPasswordRequest) {
-//        String username = resetPasswordRequest.getUsername();
-        String email = resetPasswordRequest.getEmail();
-        String newPassword = resetPasswordRequest.getNewPassword();
-        User user = userRepository.findByEmail(email);
-
-        if (user != null) {
-            user.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt(12)));
-            userRepository.save(user);
-            return new ResetPasswordResponse("Reset password successfully!", HttpStatus.OK);
-        } else {
-            throw new RuntimeException("Invalid email!");
-        }
-    }
-
-
-
-
-    @Override
+      @Override
     public Page<ManageUserDTO> getActiveUsers(Pageable pageable) {
         Page<User> activeUsersPage = userRepository.findByIsDeletedFalse(pageable);
         return activeUsersPage.map(this::convertToManageUserDTO);
@@ -165,7 +143,6 @@ public class UserServiceImpl implements UserService {
         Page <User> deletedUsersPage = userRepository.findByIsDeletedTrue(pageable);
         return deletedUsersPage.map(this::convertToManageUserDTO);
     }
-
 
     public void lockAccount(long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
@@ -189,7 +166,7 @@ public class UserServiceImpl implements UserService {
         });
     }
 
-    private UserDTO convertToUserDTO(User user) {
+      private UserDTO convertToUserDTO(User user) {
         UserDTO dto = modelMapper.map(user, UserDTO.class);
         return dto;
     }

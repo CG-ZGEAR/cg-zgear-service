@@ -14,7 +14,6 @@ import com.codegym.cgzgearservice.service.ProductService;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -47,6 +46,7 @@ public class ProductServiceImpl implements ProductService {
         createProductSpecifications(product, productDTO);
         return productDTO;
     }
+
     @Override
     public ProductDTO updateProduct(Long productId, ProductDTO productDTO) {
         Product product = productRepository.findById(productId)
@@ -109,15 +109,17 @@ public class ProductServiceImpl implements ProductService {
             return productDTO;
         }
     }
+
     @Override
     public Page<ProductDTO> getAllProducts(Pageable pageable) {
         Page<Product> products = productRepository.findAllAvailable(pageable);
         return products.map(this::convertToProductDTO);
     }
+
     @Override
     public Page<ProductDTO> getProductsByCategory(String categoryName, Pageable pageable) {
         Category category = categoryRepository.findByCategoryName(categoryName);
-        Page<Product> products= productRepository.findProductsByCategoryAndAvailableIsTrue(category, pageable);
+        Page<Product> products = productRepository.findProductsByCategoryAndAvailableIsTrue(category, pageable);
         return products.map(this::convertToProductDTO);
     }
 
@@ -260,7 +262,6 @@ public class ProductServiceImpl implements ProductService {
 
             product.getReviews().add(review);
             productRepository.save(product);
-
 
             return modelMapper.map(review, ReviewDTO.class);
         } else {

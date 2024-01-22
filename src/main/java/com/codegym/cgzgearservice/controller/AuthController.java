@@ -1,15 +1,12 @@
 package com.codegym.cgzgearservice.controller;
 
 
-import com.codegym.cgzgearservice.dto.payload.request.LoginRequest;
+import com.codegym.cgzgearservice.dto.payload.request.*;
 
-import com.codegym.cgzgearservice.dto.payload.request.RegisterRequest;
-import com.codegym.cgzgearservice.dto.payload.request.ResetPasswordRequest;
 import com.codegym.cgzgearservice.dto.payload.response.LoginResponse;
-import com.codegym.cgzgearservice.dto.payload.response.RegisterResponse;
 import com.codegym.cgzgearservice.dto.payload.response.ResetPasswordResponse;
-import com.codegym.cgzgearservice.exception.DuplicatedDataException;
 import com.codegym.cgzgearservice.security.JwtTokenProvider;
+import com.codegym.cgzgearservice.service.ForgotPasswordService;
 import com.codegym.cgzgearservice.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -44,6 +41,8 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
+    private final ForgotPasswordService forgotPasswordService;
+
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         try {
@@ -58,13 +57,14 @@ public class AuthController {
             List<String> roles = authentication.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toList());
-            return new ResponseEntity<>(new LoginResponse("Đăng nhập thành công!", roles,token), HttpStatus.OK);
+            return new ResponseEntity<>(new LoginResponse("Đăng nhập thành công!", roles, token), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(new LoginResponse("Đăng nhập thất bại!", null, null), HttpStatus.BAD_REQUEST);
         }
 
     }
+
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -80,13 +80,24 @@ public class AuthController {
     }
 
 
-    @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
-        try {
-            ResetPasswordResponse resetPasswordResponse = userService.resetPassword(resetPasswordRequest);
-            return ResponseEntity.ok(resetPasswordResponse.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid input");
-        }
+    @PostMapping("/otp/send")
+    public ResponseEntity<String> sendOtp(@RequestBody SendMailRequest sendMailRequest) {
+        forgotPasswordService.sendOtpAndSaveToDatabase(sendMailRequest);
+        return  new ResponseEntity<>("OTP sent successfully.",HttpStatus.OK);
     }
+
+    @PostMapping("reset-password/verify-otp")
+    public ResponseEntity<String> verifyOtpAndResetPassword(
+            @RequestParam String email,
+            @RequestParam String otp,
+            @RequestParam String newPassword) {
+        VerifyOtpRequest verifyOtpRequest = new VerifyOtpRequest();
+        verifyOtpRequest.setEmail(email);
+        verifyOtpRequest.setOtp(otp);
+        verifyOtpRequest.setNewPassword(newPassword);
+
+        forgotPasswordService.verifyOtpAndResetPassword(verifyOtpRequest);
+        return ResponseEntity.ok("Password reset successfully.");
+    }
+
 }
