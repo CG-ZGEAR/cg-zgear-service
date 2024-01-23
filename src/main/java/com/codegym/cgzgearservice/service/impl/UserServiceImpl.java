@@ -3,6 +3,7 @@ package com.codegym.cgzgearservice.service.impl;
 
 import com.codegym.cgzgearservice.dto.ManageUserDTO;
 import com.codegym.cgzgearservice.dto.UserDTO;
+import com.codegym.cgzgearservice.dto.payload.request.SearchRequest;
 import com.codegym.cgzgearservice.entitiy.user.Role;
 import com.codegym.cgzgearservice.entitiy.user.User;
 import com.codegym.cgzgearservice.repository.RoleRepository;
@@ -166,7 +167,25 @@ public class UserServiceImpl implements UserService {
         });
     }
 
-      private UserDTO convertToUserDTO(User user) {
+    @Override
+    public Page<UserDTO> search(SearchRequest searchRequest, Pageable pageable) {
+        Page<User> userPage = userRepository.searchUsers(
+                searchRequest.getUsername(),
+                searchRequest.getFullName(),
+                searchRequest.getEmail(),
+                pageable
+        );
+        return userPage.map(userEntity -> {
+            UserDTO userDTO = new UserDTO();
+            userDTO.setUsername(userEntity.getUsername());
+            userDTO.setFullName(userEntity.getFullName());
+            userDTO.setEmail(userEntity.getEmail());
+            return userDTO; 
+        });
+    }
+
+
+    private UserDTO convertToUserDTO(User user) {
         UserDTO dto = modelMapper.map(user, UserDTO.class);
         return dto;
     }

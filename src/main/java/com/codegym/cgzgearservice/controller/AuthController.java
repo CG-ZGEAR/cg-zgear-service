@@ -4,7 +4,6 @@ package com.codegym.cgzgearservice.controller;
 import com.codegym.cgzgearservice.dto.payload.request.*;
 
 import com.codegym.cgzgearservice.dto.payload.response.LoginResponse;
-import com.codegym.cgzgearservice.dto.payload.response.ResetPasswordResponse;
 import com.codegym.cgzgearservice.security.JwtTokenProvider;
 import com.codegym.cgzgearservice.service.ForgotPasswordService;
 import com.codegym.cgzgearservice.service.UserService;

@@ -58,7 +58,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
         User user = userRepository.findByEmail(email);
         if (user != null) {
             user.setOtpCode(otp);
-            user.setOtpExpiration(LocalDateTime.now().plusMinutes(15));
+            user.setOtpExpiration(LocalDateTime.now().plusMinutes(2));
             userRepository.save(user);
         }
     }

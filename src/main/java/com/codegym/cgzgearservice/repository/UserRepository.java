@@ -28,5 +28,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
 
     Optional<User> findByEmailAndOtpCodeAndOtpExpirationAfter(String email, String otp, LocalDateTime expirationTime);
-
+    Page<User> searchUsers(
+            @Param("username") String username,
+            @Param("fullName") String fullName,
+            @Param("email") String email,
+            Pageable pageable);
 }

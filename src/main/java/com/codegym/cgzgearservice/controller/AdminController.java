@@ -2,6 +2,7 @@ package com.codegym.cgzgearservice.controller;
 
 
 import com.codegym.cgzgearservice.dto.UserDTO;
+import com.codegym.cgzgearservice.dto.payload.request.SearchRequest;
 import com.codegym.cgzgearservice.entitiy.user.User;
 import com.codegym.cgzgearservice.repository.UserRepository;
 import com.codegym.cgzgearservice.service.UserService;
@@ -50,4 +51,10 @@ public class AdminController {
     public ResponseEntity<Iterable<UserDTO>> findUser(@PathVariable String input) {
         return new ResponseEntity<>(userService.findUser(input), HttpStatus.OK);
     }
+
+    @PostMapping("/search")
+    public Page<UserDTO> search(@RequestBody SearchRequest searchRequest, Pageable pageable) {
+        return userService.search(searchRequest, pageable);
+    }
+
 }
