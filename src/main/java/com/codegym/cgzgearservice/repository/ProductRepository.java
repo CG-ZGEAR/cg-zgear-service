@@ -19,4 +19,12 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     @Query("SELECT p FROM Product p WHERE p.available = true")
     Page<Product> findAllAvailable(Pageable pageable);
     Product findProductByIdAndAvailableIsTrue(Long id);
+
+    @Query("SELECT p FROM Product p\n" +
+            "JOIN p.cartItems ci\n" +
+            "JOIN ci.cart o\n" +
+            "WHERE o.status = 'COMPLETED'\n" +
+            "GROUP BY p.id\n" +
+            "ORDER BY SUM(ci.quantity) DESC\n")
+    Page<Product> getBestSellers();
 }

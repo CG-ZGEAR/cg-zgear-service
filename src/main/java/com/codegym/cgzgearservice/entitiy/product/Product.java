@@ -49,4 +49,8 @@ public class Product {
     @JsonIgnore
     private Set<ProductDiscount> discounts;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<CartItem> cartItems;
+
 }
