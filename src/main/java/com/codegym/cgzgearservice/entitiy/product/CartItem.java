@@ -25,8 +25,8 @@ public class CartItem {
     @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "price")
-    private Double price;
+    @Column(name = "sub_total")
+    private Double subTotal;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cart_id")

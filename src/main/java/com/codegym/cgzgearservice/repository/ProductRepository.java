@@ -21,10 +21,10 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     Product findProductByIdAndAvailableIsTrue(Long id);
 
     @Query("SELECT p FROM Product p\n" +
-            "JOIN p.cartItems ci\n" +
-            "JOIN ci.cart o\n" +
-            "WHERE o.status = 'COMPLETED'\n" +
+            "JOIN p.orderItems oi\n" +
+            "JOIN oi.order o\n" +
+            "WHERE o.status = 'SHIPPED' AND p.available = true\n" +
             "GROUP BY p.id\n" +
-            "ORDER BY SUM(ci.quantity) DESC\n")
-    Page<Product> getBestSellers();
+            "ORDER BY SUM(oi.quantity) DESC\n")
+    Page<Product> getBestSellers(Pageable pageable);
 }
