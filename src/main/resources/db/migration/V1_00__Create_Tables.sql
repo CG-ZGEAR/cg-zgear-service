@@ -87,7 +87,8 @@ CREATE TABLE IF NOT EXISTS specifications (
 CREATE TABLE IF NOT EXISTS carts (
                                      id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
                                      user_id BIGINT NOT NULL,
-                FOREIGN KEY (user_id) REFERENCES users (id)
+                FOREIGN KEY (user_id) REFERENCES users (id),
+    total DOUBLE
     );
 
 CREATE TABLE IF NOT EXISTS cart_items (
@@ -95,18 +96,26 @@ CREATE TABLE IF NOT EXISTS cart_items (
                                          cart_id BIGINT NOT NULL,
                                          product_id BIGINT NOT NULL,
                                          quantity INT,
-                                         price DOUBLE,
+                                         sub_total DOUBLE,
                                          FOREIGN KEY (cart_id) REFERENCES carts (id),
     FOREIGN KEY (product_id) REFERENCES products (id)
     );
 
 CREATE TABLE IF NOT EXISTS orders (
                                       id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                                      status VARCHAR(45),
-    cart_id BIGINT NOT NULL,
+                                      status ENUM('PENDING', 'PAID', 'SHIPPED'),
     date_created DATETIME,
-    total INT,
-    FOREIGN KEY (cart_id) REFERENCES carts (id)
+    total DOUBLE
+    );
+
+CREATE TABLE IF NOT EXISTS order_items (
+                                          id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                                          order_id BIGINT NOT NULL,
+                                          product_id BIGINT NOT NULL,
+                                          quantity INT,
+                                          sub_total DOUBLE,
+                                          FOREIGN KEY (order_id) REFERENCES orders (id),
+    FOREIGN KEY (product_id) REFERENCES products (id)
     );
 
 -- Coupons

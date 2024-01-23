@@ -43,20 +43,25 @@ public class CartServiceImpl implements CartService {
         if (existingItem != null) {
             existingItem.setQuantity(existingItem.getQuantity() + quantity);
             Double price = getPriceForCartItem(productRepository.findProductByIdAndAvailableIsTrue(productId), existingItem.getQuantity());
-            existingItem.setPrice(price);
+            existingItem.setSubTotal(price);
         } else {
             CartItem cartItem = new CartItem();
             Product product = productRepository.findProductByIdAndAvailableIsTrue(productId);
             cartItem.setCart(cart);
             cartItem.setProduct(product);
             cartItem.setQuantity(quantity);
-            cartItem.setPrice(getPriceForCartItem(product, 1));
+            cartItem.setSubTotal(getPriceForCartItem(product, 1));
             cartItemRepository.save(cartItem);
             cart.getCartItems().add(cartItem);
         }
         cartRepository.save(cart);
         CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
         return cartDTO;
+    }
+
+    @Override
+    public CartDTO getCart(User user) {
+        return null;
     }
 
     private Double getPriceForCartItem(Product product, int quantity) {
