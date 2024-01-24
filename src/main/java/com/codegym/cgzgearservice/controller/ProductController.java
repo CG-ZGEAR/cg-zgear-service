@@ -92,7 +92,7 @@ public class ProductController {
 
     @GetMapping("/getBestSellers")
     public ResponseEntity<Page<ProductDTO>> getBestSellers(
-            @PageableDefault(size = 5) Pageable pageable) {
+            @PageableDefault(size = 4) Pageable pageable) {
         Page<ProductDTO> products = productService.getBestSellers(pageable);
         return ResponseEntity.ok(products);
     }

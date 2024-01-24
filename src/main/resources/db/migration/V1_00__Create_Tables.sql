@@ -86,7 +86,8 @@ CREATE TABLE IF NOT EXISTS specifications (
 
 CREATE TABLE IF NOT EXISTS carts (
                                      id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                                     user_id BIGINT NOT NULL,
+                                     user_id BIGINT NULL,
+                                    session_id VARCHAR(255) NULL,
                 FOREIGN KEY (user_id) REFERENCES users (id),
     total DOUBLE
     );

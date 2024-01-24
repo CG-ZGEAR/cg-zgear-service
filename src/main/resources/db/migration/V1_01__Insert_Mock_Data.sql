@@ -161,7 +161,7 @@ VALUES (2, 4, '49 inch'),
 -- Insert data into orders and order_items
 INSERT INTO orders (status, date_created, total)
 VALUES
-    ('PAID', NOW(), 1999.98),
+    ('SHIPPED', NOW(), 1999.98),
     ('SHIPPED', NOW(), 59.97);
 
 -- Order 1 items
