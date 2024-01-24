@@ -28,14 +28,8 @@ public class CartServiceImpl implements CartService {
     private final ProductDiscountService productDiscountService;
 
     @Override
-    public CartDTO addToCart(User user, Long productId, int quantity) {
-
-        Cart cart = cartRepository.findByUser(user);
-        if (cart == null) {
-            cart = new Cart();
-            cart.setUser(user);
-            cartRepository.save(cart);
-        }
+    public CartDTO addToCart(User user,String sessionId, Long productId, int quantity) {
+        Cart cart = checkIfCartExist(user, sessionId);
         CartItem existingItem = cart.getCartItems().stream()
                 .filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst()
@@ -58,10 +52,32 @@ public class CartServiceImpl implements CartService {
         CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
         return cartDTO;
     }
-
     @Override
-    public CartDTO getCart(User user) {
-        return null;
+    public CartDTO getCart(User user, String sessionId) {
+        Cart cart = checkIfCartExist(user, sessionId);
+        CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
+        return cartDTO;
+
+    }
+    private Cart checkIfCartExist(User user, String sessionId){
+        Cart cart;
+        if (user==null){
+            cart = cartRepository.findCartBySessionId(sessionId);
+            if (cart == null) {
+                cart = new Cart();
+                cart.setSessionId(sessionId);
+                cartRepository.save(cart);
+            }
+
+        } else  {
+            cart = cartRepository.findByUser(user);
+            if (cart == null) {
+                cart = new Cart();
+                cart.setUser(user);
+                cartRepository.save(cart);
+            }
+        }
+        return cart;
     }
 
     private Double getPriceForCartItem(Product product, int quantity) {

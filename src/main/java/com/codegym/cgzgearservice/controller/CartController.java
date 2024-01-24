@@ -3,6 +3,7 @@ package com.codegym.cgzgearservice.controller;
 import com.codegym.cgzgearservice.dto.CartDTO;
 import com.codegym.cgzgearservice.repository.UserRepository;
 import com.codegym.cgzgearservice.service.CartService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -21,21 +22,33 @@ public class CartController {
     @PostMapping("/add/{productId}")
     public ResponseEntity<CartDTO> addToCart(
             @PathVariable Long productId,
+            HttpSession session,
             @AuthenticationPrincipal User authUser,
             @RequestParam(defaultValue = "1") int quantity) {
+        CartDTO cartDTO;
+        if (authUser == null){
+             cartDTO = cartService.addToCart(null,session.getId(), productId, quantity);
 
-        com.codegym.cgzgearservice.entitiy.user.User user = userRepository.findUserByUsername(authUser.getUsername());
-        CartDTO cartDTO = cartService.addToCart(user, productId, quantity);
+        } else {
+            com.codegym.cgzgearservice.entitiy.user.User user = userRepository.findUserByUsername(authUser.getUsername());
+             cartDTO = cartService.addToCart(user,session.getId(), productId, quantity);
+        }
         return ResponseEntity.ok(cartDTO);
     }
 
     @GetMapping()
     public ResponseEntity<CartDTO> getCart(
-            @AuthenticationPrincipal User authUser) {
+            @AuthenticationPrincipal User authUser,
+            HttpSession session) {
 
-        com.codegym.cgzgearservice.entitiy.user.User user = userRepository.findUserByUsername(authUser.getUsername());
-        CartDTO cartDTO = cartService.getCart(user);
+        CartDTO cartDTO;
+        if (authUser == null){
+            cartDTO = cartService.getCart(null,session.getId());
+
+        } else {
+            com.codegym.cgzgearservice.entitiy.user.User user = userRepository.findUserByUsername(authUser.getUsername());
+            cartDTO = cartService.getCart(user,session.getId());
+        }
         return ResponseEntity.ok(cartDTO);
-
     }
 }

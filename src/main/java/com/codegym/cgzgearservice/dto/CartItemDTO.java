@@ -12,7 +12,8 @@ public class CartItemDTO {
 
     private String productName;
 
-    private Double price;
+    private Double subTotal;
+
 
     private Integer quantity;
 
