@@ -64,7 +64,7 @@ public class AuthController {
 
     }
 
-    @PostMapping("/logout")
+        @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

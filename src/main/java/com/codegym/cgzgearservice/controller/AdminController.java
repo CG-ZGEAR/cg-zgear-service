@@ -10,6 +10,7 @@ import com.codegym.cgzgearservice.service.impl.UserServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +55,8 @@ public class AdminController {
 
     @PostMapping("/search")
     public Page<UserDTO> search(@RequestBody SearchRequest searchRequest, Pageable pageable) {
-        return userService.search(searchRequest, pageable);
+        Pageable modifiedPageable = PageRequest.of(pageable.getPageNumber(), 5);
+        return userService.search(searchRequest, modifiedPageable);
     }
 
 }

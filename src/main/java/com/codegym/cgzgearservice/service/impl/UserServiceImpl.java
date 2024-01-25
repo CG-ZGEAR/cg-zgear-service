@@ -169,19 +169,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserDTO> search(SearchRequest searchRequest, Pageable pageable) {
-        Page<User> userPage = userRepository.searchUsers(
+        Page<User> userPage = userRepository.findByUsernameContainingOrFullNameContainingOrEmailContaining(
                 searchRequest.getUsername(),
                 searchRequest.getFullName(),
                 searchRequest.getEmail(),
                 pageable
         );
-        return userPage.map(userEntity -> {
-            UserDTO userDTO = new UserDTO();
-            userDTO.setUsername(userEntity.getUsername());
-            userDTO.setFullName(userEntity.getFullName());
-            userDTO.setEmail(userEntity.getEmail());
-            return userDTO; 
-        });
+        return userPage.map(this::convertToUserDTO);
     }
 
 
