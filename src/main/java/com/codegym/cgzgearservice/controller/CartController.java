@@ -33,7 +33,9 @@ public class CartController {
             com.codegym.cgzgearservice.entitiy.user.User user = userRepository.findUserByUsername(authUser.getUsername());
              cartDTO = cartService.addToCart(user,session.getId(), productId, quantity);
         }
-        return ResponseEntity.ok(cartDTO);
+        return ResponseEntity.ok()
+                .header("Session-Id", session.getId())
+                .body(cartDTO);
     }
 
     @GetMapping()
@@ -49,6 +51,19 @@ public class CartController {
             com.codegym.cgzgearservice.entitiy.user.User user = userRepository.findUserByUsername(authUser.getUsername());
             cartDTO = cartService.getCart(user,session.getId());
         }
-        return ResponseEntity.ok(cartDTO);
+        return ResponseEntity.ok()
+                .header("Session-Id", session.getId())
+                .body(cartDTO);
+
     }
+    @PostMapping("/merge")
+    public ResponseEntity<Void> mergeCarts(HttpSession session,
+                                           @AuthenticationPrincipal User authUser) {
+
+        com.codegym.cgzgearservice.entitiy.user.User user = userRepository.findUserByUsername(authUser.getUsername());
+        cartService.mergeCarts(session.getId(), user);
+        return ResponseEntity.ok().build();
+
+    }
+
 }

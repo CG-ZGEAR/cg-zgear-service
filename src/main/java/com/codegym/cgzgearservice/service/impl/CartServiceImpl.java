@@ -28,7 +28,7 @@ public class CartServiceImpl implements CartService {
     private final ProductDiscountService productDiscountService;
 
     @Override
-    public CartDTO addToCart(User user,String sessionId, Long productId, int quantity) {
+    public CartDTO addToCart(User user, String sessionId, Long productId, int quantity) {
         Cart cart = checkIfCartExist(user, sessionId);
         CartItem existingItem = cart.getCartItems().stream()
                 .filter(item -> item.getProduct().getId().equals(productId))
@@ -52,6 +52,7 @@ public class CartServiceImpl implements CartService {
         CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
         return cartDTO;
     }
+
     @Override
     public CartDTO getCart(User user, String sessionId) {
         Cart cart = checkIfCartExist(user, sessionId);
@@ -59,9 +60,33 @@ public class CartServiceImpl implements CartService {
         return cartDTO;
 
     }
-    private Cart checkIfCartExist(User user, String sessionId){
+
+    @Override
+    public void mergeCarts(String sessionId, User user) {
+        Cart sessionCart = cartRepository.findCartBySessionId(sessionId);
+        Cart userCart = cartRepository.findByUser(user);
+
+        if (userCart == null || userCart.getCartItems().isEmpty()) {
+            if (sessionCart != null) {
+                Cart newUserCart = new Cart();
+                newUserCart.setUser(user);
+                for (CartItem item : sessionCart.getCartItems()) {
+                    CartItem cartItem = new CartItem();
+                    cartItem.setProduct(item.getProduct());
+                    cartItem.setQuantity(item.getQuantity());
+                    cartItem.setCart(newUserCart);
+                    newUserCart.getCartItems().add(cartItem);
+                }
+                cartRepository.save(newUserCart);
+                cartRepository.delete(sessionCart);
+
+            }
+        }
+    }
+
+    private Cart checkIfCartExist(User user, String sessionId) {
         Cart cart;
-        if (user==null){
+        if (user == null) {
             cart = cartRepository.findCartBySessionId(sessionId);
             if (cart == null) {
                 cart = new Cart();
@@ -69,7 +94,7 @@ public class CartServiceImpl implements CartService {
                 cartRepository.save(cart);
             }
 
-        } else  {
+        } else {
             cart = cartRepository.findByUser(user);
             if (cart == null) {
                 cart = new Cart();
