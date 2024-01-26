@@ -2,6 +2,7 @@ package com.codegym.cgzgearservice.service.impl;
 
 import com.codegym.cgzgearservice.entitiy.user.User;
 import com.codegym.cgzgearservice.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
-    @Autowired
-    private UserRepository userRepo;
+    private final UserRepository userRepo;
 
 
     public UserDetails loadUserByUsername(String username) {

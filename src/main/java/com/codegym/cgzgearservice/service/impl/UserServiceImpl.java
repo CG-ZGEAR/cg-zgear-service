@@ -9,6 +9,7 @@ import com.codegym.cgzgearservice.repository.RoleRepository;
 import com.codegym.cgzgearservice.repository.UserRepository;
 import com.codegym.cgzgearservice.service.UserService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,14 +27,12 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private  ModelMapper modelMapper;
-    @Autowired
-    RoleRepository roleRepository;
+    private final UserRepository userRepository;
+    private  final ModelMapper modelMapper;
+    private final RoleRepository roleRepository;
 
 
     @Override

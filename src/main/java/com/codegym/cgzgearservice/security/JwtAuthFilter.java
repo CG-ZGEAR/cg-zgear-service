@@ -23,13 +23,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 
     @Autowired
-    JwtTokenProvider jwtTokenProvider;
+    private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     AuthenticationManager authenticationManager;
 
     @Autowired
-    UserDetailsServiceImpl userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Override
     protected void doFilterInternal(
