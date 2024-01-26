@@ -71,6 +71,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers("/api/auth/**",
                                 "/api/users/register",
+                                "/api/users/detail",
                                 "/api/products",
                                 "/api/products/**",
                                 "/api/categories/**"
