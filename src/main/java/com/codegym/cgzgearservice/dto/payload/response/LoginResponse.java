@@ -9,12 +9,11 @@ import java.util.List;
 public class LoginResponse {
     @NotBlank
     private String message;
-
     @NotBlank
     private List<String> roles;
-
     @Nullable
     private String token;
+
 
     public LoginResponse() {
         super();
