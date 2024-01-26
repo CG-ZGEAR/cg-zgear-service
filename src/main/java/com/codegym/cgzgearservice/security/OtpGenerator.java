@@ -22,7 +22,6 @@ public class OtpGenerator {
     }
 
     public static void main(String[] args) {
-        // Nếu muốn chạy độc lập, có thể sử dụng như này
         OtpGenerator otpGenerator = new OtpGenerator();
         String otp = otpGenerator.generateOtp();
         System.out.println("Generated OTP: " + otp);

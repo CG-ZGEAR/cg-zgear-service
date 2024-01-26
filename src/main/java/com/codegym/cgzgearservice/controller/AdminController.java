@@ -2,6 +2,7 @@ package com.codegym.cgzgearservice.controller;
 
 
 import com.codegym.cgzgearservice.dto.UserDTO;
+import com.codegym.cgzgearservice.dto.payload.request.SearchRequest;
 import com.codegym.cgzgearservice.entitiy.user.User;
 import com.codegym.cgzgearservice.repository.UserRepository;
 import com.codegym.cgzgearservice.service.UserService;
@@ -9,6 +10,7 @@ import com.codegym.cgzgearservice.service.impl.UserServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,4 +52,11 @@ public class AdminController {
     public ResponseEntity<Iterable<UserDTO>> findUser(@PathVariable String input) {
         return new ResponseEntity<>(userService.findUser(input), HttpStatus.OK);
     }
+
+    @PostMapping("/search")
+    public Page<UserDTO> search(@RequestBody SearchRequest searchRequest, Pageable pageable) {
+        Pageable modifiedPageable = PageRequest.of(pageable.getPageNumber(), 5);
+        return userService.search(searchRequest, modifiedPageable);
+    }
+
 }
