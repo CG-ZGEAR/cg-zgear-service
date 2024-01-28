@@ -8,7 +8,9 @@ import com.codegym.cgzgearservice.entitiy.user.Role;
 import com.codegym.cgzgearservice.entitiy.user.User;
 import com.codegym.cgzgearservice.repository.RoleRepository;
 import com.codegym.cgzgearservice.repository.UserRepository;
+import com.codegym.cgzgearservice.security.JwtTokenProvider;
 import com.codegym.cgzgearservice.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
 
     @Override
     public Page<UserDTO> findAll(Pageable pageable) {
@@ -85,15 +89,6 @@ public class UserServiceImpl implements UserService {
     public UserDTO getUserById(Long userId) {
         User user = userRepository.findById(userId).orElse(null);
         return modelMapper.map(user, UserDTO.class);
-    }
-
-
-    @Override
-    public List<UserDTO> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream()
-                .map(this::convertToUserDTO)
-                .collect(Collectors.toList());
     }
 
     @Override
@@ -166,15 +161,6 @@ public class UserServiceImpl implements UserService {
         });
     }
 
-    @Override
-<<<<<<< HEAD
-    public UserDTO getUserByUsername(String username) {
-        User user = userRepository.findByUsername(username);
-        if (user != null) {
-            return convertUserToUserDTO(user);
-        }
-        return null;
-    }
 
     private UserDTO convertUserToUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
@@ -187,9 +173,9 @@ public class UserServiceImpl implements UserService {
         userDTO.setDate(user.getDate());
         userDTO.setAvatar(user.getAvatar());
         userDTO.setPassword(user.getPassword());
-         return userDTO;
+        return userDTO;
     }
-=======
+
     public Page<UserDTO> search(SearchRequest searchRequest, Pageable pageable) {
         Page<User> userPage = userRepository.findByUsernameContainingOrFullNameContainingOrEmailContaining(
                 searchRequest.getUsername(),
@@ -200,7 +186,14 @@ public class UserServiceImpl implements UserService {
         return userPage.map(this::convertToUserDTO);
     }
 
->>>>>>> ae36565c6ad1b5f24d845a9a3b46f831e2f3ce0d
+    @Override
+    public UserDTO getUserByToken(HttpServletRequest httpRequest) {
+        String token = httpRequest.getHeader("Authorization").substring(7);
+        String username = jwtTokenProvider.getUsernameFromJWT(token);
+        User user = userRepository.findUserByUsername(username);
+        return convertToUserDTO(user);
+    }
+
 
     private UserDTO convertToUserDTO(User user) {
         UserDTO dto = modelMapper.map(user, UserDTO.class);

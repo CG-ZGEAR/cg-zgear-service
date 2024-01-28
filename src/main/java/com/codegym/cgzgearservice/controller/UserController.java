@@ -3,10 +3,12 @@ package com.codegym.cgzgearservice.controller;
 import com.codegym.cgzgearservice.dto.ManageUserDTO;
 import com.codegym.cgzgearservice.dto.UserDTO;
 import com.codegym.cgzgearservice.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -79,5 +81,10 @@ public class UserController {
         return new ResponseEntity<>(userService.updateUser(userDTO), HttpStatus.OK);
     }
 
-
+    @GetMapping("/detail")
+    public ResponseEntity<UserDTO> getUser(HttpServletRequest httpRequest) {
+        return new ResponseEntity<>(userService.getUserByToken(httpRequest), HttpStatus.OK);
+    }
 }
+
+
