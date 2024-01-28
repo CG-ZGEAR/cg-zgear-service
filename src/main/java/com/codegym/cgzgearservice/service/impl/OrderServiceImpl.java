@@ -76,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
             message.setFrom("tranhuutjnh@gmail.com");
             message.setTo(customerEmail);
             message.setSubject("Order Confirmation");
-            message.setText("Thank you for your order! Your order has been confirmed." + order.toString());
+            message.setText("Thank you for your order! Your order has been confirmed." );
             mailSender.send(message);
         } catch (MailException e) {
             e.printStackTrace();
