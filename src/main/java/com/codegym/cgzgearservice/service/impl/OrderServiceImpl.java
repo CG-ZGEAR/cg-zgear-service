@@ -1,12 +1,14 @@
 package com.codegym.cgzgearservice.service.impl;
 
 import com.codegym.cgzgearservice.constants.OrderStatus;
+import com.codegym.cgzgearservice.dto.AddressDTO;
 import com.codegym.cgzgearservice.dto.OrderDTO;
 import com.codegym.cgzgearservice.dto.OrderItemDTO;
 import com.codegym.cgzgearservice.entitiy.product.Order;
 import com.codegym.cgzgearservice.entitiy.product.OrderItem;
 import com.codegym.cgzgearservice.entitiy.user.Address;
 import com.codegym.cgzgearservice.entitiy.user.User;
+import com.codegym.cgzgearservice.repository.AddressRepository;
 import com.codegym.cgzgearservice.repository.OrderRepository;
 import com.codegym.cgzgearservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final ModelMapper modelMapper;
     private final OrderRepository orderRepository;
+    private final AddressRepository addressRepository;
 
     @Override
     public OrderDTO processOrder(User user, String sessionId, OrderDTO orderDTO) {
@@ -33,13 +36,22 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(OrderStatus.PENDING);
         order.setDateCreated(LocalDateTime.now().toString());
 
-        Address address = user.getAddress().stream()
-                .filter(a -> a.getId().equals(orderDTO.getAddressId()))
-                .findFirst()
-                .orElse(null);
-        order.setAddress(address);
-        order.setTotal(orderDTO.getTotal());
+        AddressDTO addressDTO = orderDTO.getAddressDTO();
+        Address address;
 
+        if (addressDTO.getId() != null) {
+            address = addressRepository.findById(addressDTO.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid address ID"));
+        } else {
+            address = new Address();
+            address.setStreet(addressDTO.getStreet());
+            address.setCity(addressDTO.getCity());
+            address.setDistrict(addressDTO.getDistrict());
+            address.setWard(addressDTO.getWard());
+            address.setUser(user);
+            addressRepository.save(address);
+        }
+        order.setAddress(address);
         List<OrderItem> orderItems = orderDTO.getItems().stream()
                 .map(itemDTO -> modelMapper.map(itemDTO, OrderItem.class))
                 .collect(Collectors.toList());
