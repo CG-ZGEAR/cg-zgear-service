@@ -92,13 +92,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Override
-    public List<UserDTO> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream()
-                .map(this::convertToUserDTO)
-                .collect(Collectors.toList());
-    }
+
 
     @Override
     public void DeleteUserById(Long userId) {

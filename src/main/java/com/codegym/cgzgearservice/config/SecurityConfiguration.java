@@ -3,7 +3,6 @@ package com.codegym.cgzgearservice.config;
 import com.codegym.cgzgearservice.security.JwtAccessDeniedHandler;
 import com.codegym.cgzgearservice.security.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -25,6 +24,9 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
+/**
+ * @author ADMIN
+ */
 @EnableAutoConfiguration
 @EnableWebSecurity
 @Configuration
@@ -72,6 +74,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/auth/**",
                                 "/api/users/register",
                                 "/api/users/detail",
+                                "/api/spec-templates/**",
                                 "/api/products",
                                 "/api/products/**",
                                 "/api/categories/**",

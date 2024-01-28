@@ -1,8 +1,11 @@
 package com.codegym.cgzgearservice.service;
 
-import com.codegym.cgzgearservice.dto.ProductDTO;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.codegym.cgzgearservice.entitiy.product.Category;
+
+import java.util.List;
+
 
 public interface CategoryService {
+
+    List<Category> getAllCategories();
 }
