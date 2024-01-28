@@ -1,11 +1,11 @@
 -- Insert data into orders and order_items for new products
-INSERT INTO orders (status, date_created, total)
+INSERT INTO orders (status, date_created, total,address_id)
 VALUES
-    ('PAID', NOW(), 649.99),
-    ('SHIPPED', NOW(), 829.99),
-    ('SHIPPED', NOW(), 279.99),
-    ('SHIPPED', NOW(), 449.99),
-    ('SHIPPED', NOW(), 399.99);
+    ('PAID', NOW(), 649.99,1),
+    ('SHIPPED', NOW(), 829.99,1),
+    ('SHIPPED', NOW(), 279.99,1),
+    ('SHIPPED', NOW(), 449.99,1),
+    ('SHIPPED', NOW(), 399.99,1);
 
 -- Order 3 items
 INSERT INTO order_items (order_id, product_id, quantity, sub_total)
