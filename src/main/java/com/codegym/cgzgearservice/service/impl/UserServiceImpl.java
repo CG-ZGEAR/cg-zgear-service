@@ -159,6 +159,20 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    private UserDTO convertUserToUserDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setFullName(user.getFullName());
+        userDTO.setPhoneNumber(user.getPhoneNumber());
+        userDTO.setGender(user.getGender());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setDate(user.getDate());
+        userDTO.setAvatar(user.getAvatar());
+        userDTO.setPassword(user.getPassword());
+        return userDTO;
+    }
+
     public Page<UserDTO> search(SearchRequest searchRequest, Pageable pageable) {
         Page<User> userPage = userRepository.findByUsernameContainingOrFullNameContainingOrEmailContaining(
                 searchRequest.getUsername(),
