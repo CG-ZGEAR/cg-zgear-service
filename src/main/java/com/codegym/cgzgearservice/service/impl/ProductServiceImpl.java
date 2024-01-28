@@ -39,13 +39,22 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO createProduct(ProductDTO productDTO) {
         Product product = new Product();
+
         modelMapper.map(productDTO, product);
+
+        Category category = categoryRepository.findByCategoryName(productDTO.getCategoryName());
+        product.setCategory(category);
+
         createProductImages(product, productDTO.getImageUrls());
         product.setAvailable(true);
+
         product = productRepository.save(product);
+
         createProductSpecifications(product, productDTO);
+
         return productDTO;
     }
+
 
     @Override
     public ProductDTO updateProduct(Long productId, ProductDTO productDTO) {
