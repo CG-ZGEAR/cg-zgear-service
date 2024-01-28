@@ -3,9 +3,7 @@ package com.codegym.cgzgearservice.service;
 
 import com.codegym.cgzgearservice.dto.ManageUserDTO;
 import com.codegym.cgzgearservice.dto.UserDTO;
-import com.codegym.cgzgearservice.dto.payload.request.*;
-import com.codegym.cgzgearservice.dto.payload.response.ResetPasswordResponse;
-import com.codegym.cgzgearservice.entitiy.user.User;
+import com.codegym.cgzgearservice.dto.payload.request.SearchRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -35,4 +33,9 @@ public interface UserService {
 
     void unlockAccount(long userId);
 
+<<<<<<< HEAD
 }
+=======
+    Page <UserDTO> search (SearchRequest searchRequest, Pageable  pageable);
+    }
+>>>>>>> ae36565c6ad1b5f24d845a9a3b46f831e2f3ce0d

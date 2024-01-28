@@ -10,7 +10,7 @@ VALUES
 INSERT INTO product_discounts (product_id, discount_type, discount_amount, start_date, end_date, active)
 VALUES
     (1, 'PERCENT', 5.00, '2024-01-01', '2024-01-31', TRUE),
-    (2, 'FIXED_AMOUNT', 20.00, '2024-02-01', '2024-02-28', TRUE),
-    (3, 'PERCENT', 10.00, '2024-03-01', '2024-03-31', TRUE),
-    (1, 'FIXED_AMOUNT', 30.00, '2024-04-01', '2024-04-30', TRUE),
-    (2, 'PERCENT', 15.00, '2024-05-01', '2024-05-31', TRUE);
+    (2, 'FIXED_AMOUNT', 20.00, '2024-01-01', '2024-02-28', TRUE),
+    (3, 'PERCENT', 10.00, '2024-01-01', '2024-03-31', TRUE),
+    (1, 'FIXED_AMOUNT', 30.00, '2024-01-01', '2024-04-30', TRUE),
+    (2, 'PERCENT', 15.00, '2024-01-01', '2024-05-31', TRUE);

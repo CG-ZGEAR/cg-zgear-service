@@ -27,4 +27,5 @@ public interface ProductService {
     ProductDTO getProductByName(String productName);
 
     ReviewDTO addReview(Long productId, ReviewDTO reviewDTO, Principal principal);
+    Page<ProductDTO> getBestSellers(Pageable pageable);
 }

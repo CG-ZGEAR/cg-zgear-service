@@ -8,6 +8,7 @@ import com.codegym.cgzgearservice.repository.UserRepository;
 import com.codegym.cgzgearservice.security.OtpGenerator;
 import com.codegym.cgzgearservice.service.ForgotPasswordService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ import java.util.Optional;
  * @author ADMIN
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 
     private final UserRepository userRepository;
@@ -58,7 +59,7 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
         User user = userRepository.findByEmail(email);
         if (user != null) {
             user.setOtpCode(otp);
-            user.setOtpExpiration(LocalDateTime.now().plusMinutes(15));
+            user.setOtpExpiration(LocalDateTime.now().plusMinutes(2));
             userRepository.save(user);
         }
     }

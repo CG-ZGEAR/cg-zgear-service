@@ -30,6 +30,11 @@ public class Cart {
     @JoinColumn(name = "user_id", nullable = true)
     private User user;
 
+    @Column(name="session_id")
+    private String sessionId;
+
+    @Column(name = "total")
+    Double total;
     public Cart() {
         this.cartItems = new ArrayList<>();
     }
