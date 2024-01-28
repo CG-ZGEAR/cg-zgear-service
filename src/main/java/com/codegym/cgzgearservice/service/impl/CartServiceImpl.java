@@ -58,7 +58,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartDTO getCart(User user, String sessionId) {
         Cart cart = checkIfCartExist(user, sessionId);
-        Double total=null;
+        Double total=0.0;
         for (CartItem cartItem: cart.getCartItems()){
             total = getPriceForCartItem(cartItem);
         }
@@ -98,30 +98,40 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartDTO updateCart(User user, String sessionId,CartDTO cartDTO) {
+    public CartDTO updateCart(User user, String sessionId, CartDTO cartDTO) {
         Cart existingCart = checkIfCartExist(user, sessionId);
-        if(existingCart != null) {
+        if (existingCart != null) {
             List<CartItem> existingItems = existingCart.getCartItems();
-            for(CartItemDTO dto : cartDTO.getCartItems()) {
+            List<CartItemDTO> updatedItems = cartDTO.getCartItems();
+
+            List<CartItem> itemsToRemove = existingItems.stream()
+                    .filter(existingItem ->
+                            updatedItems.stream().noneMatch(dto -> dto.getProductId().equals(existingItem.getProduct().getId())))
+                    .collect(Collectors.toList());
+            existingItems.removeAll(itemsToRemove);
+            itemsToRemove.forEach(cartItemRepository::delete);
+            if (existingItems.isEmpty()) {
+                cartRepository.delete(existingCart);
+                return new CartDTO();
+            }
+            for (CartItemDTO dto : updatedItems) {
                 CartItem existingItem = existingItems.stream()
                         .filter(item -> item.getProduct().getId().equals(dto.getProductId()))
                         .findFirst()
                         .orElse(null);
 
-                if(existingItem != null) {
+                if (existingItem != null) {
                     existingItem.setQuantity(dto.getQuantity());
                 } else {
                     CartItem newItem = modelMapper.map(dto, CartItem.class);
                     existingItems.add(newItem);
                 }
-
             }
+
             existingCart.setCartItems(existingItems);
             cartRepository.save(existingCart);
-            return getCart(user,sessionId);
-        } else {
-
-            Cart newCart = modelMapper.map(cartDTO, Cart.class);
+            return getCart(user, sessionId);
+        } else {            Cart newCart = modelMapper.map(cartDTO, Cart.class);
             if(user != null) {
                 newCart.setUser(user);
             } else {
