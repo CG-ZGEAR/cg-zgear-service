@@ -1,5 +1,6 @@
 package com.codegym.cgzgearservice.entitiy.product;
 
+import com.codegym.cgzgearservice.dto.CartItemDTO;
 import com.codegym.cgzgearservice.entitiy.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -35,7 +36,17 @@ public class Cart {
 
     @Column(name = "total")
     Double total;
+
     public Cart() {
         this.cartItems = new ArrayList<>();
     }
+
+    public double getTotal() {
+        this.total=0D;
+        for (CartItem cartItem : cartItems) {
+            total += cartItem.getSubTotal();
+        }
+        return total;
+    }
+
 }

@@ -15,5 +15,4 @@ public class ProductDTO {
     private List<SpecificationDTO> specifications;
     private List<ReviewDTO> reviews;
     private List<ProductDiscountDTO> discounts;
-
 }
