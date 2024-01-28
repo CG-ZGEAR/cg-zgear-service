@@ -5,6 +5,7 @@ import com.codegym.cgzgearservice.repository.UserRepository;
 import com.codegym.cgzgearservice.service.CartService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.mapping.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -66,4 +67,21 @@ public class CartController {
 
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<CartDTO> updateCart(
+            @RequestBody CartDTO cartDTO,
+            @AuthenticationPrincipal User authUser,
+            HttpSession session
+    ){
+        if (authUser == null){
+            cartDTO = cartService.updateCart(null,session.getId(), cartDTO);
+
+        } else {
+            com.codegym.cgzgearservice.entitiy.user.User user = userRepository.findUserByUsername(authUser.getUsername());
+            cartDTO = cartService.updateCart(user,session.getId(), cartDTO);
+        }
+        return ResponseEntity.ok()
+                .body(cartDTO);
+
+    }
 }
