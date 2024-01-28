@@ -22,7 +22,7 @@ public class SpecificationTemplate {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column(name= "spec_key")
+    @Column(name = "spec_key")
     private String specKey;
 
 }

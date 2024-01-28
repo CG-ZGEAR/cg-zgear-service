@@ -22,6 +22,7 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
+
     @Autowired
     private UserRepository userRepository;
 
@@ -29,6 +30,7 @@ public class AdminController {
     public ResponseEntity<Page<UserDTO>> getUserList(Pageable pageable) {
         return new ResponseEntity<>(userService.findAll(pageable), HttpStatus.OK);
     }
+
     @GetMapping("/foo/list")
     public Page<User> handleList(Pageable pageable) {
         return userRepository.findAll(pageable);

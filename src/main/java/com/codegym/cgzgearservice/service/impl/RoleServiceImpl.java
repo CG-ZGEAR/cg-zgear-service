@@ -28,26 +28,9 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Iterable<RoleDTO> findAll() {
-        Iterable<Role> entities = roleRepository.findAll();
-        return StreamSupport.stream(entities.spliterator(), true)
-                .map(entity -> modelMapper.map(entity, RoleDTO.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public Optional<RoleDTO> findById(Long id) {
         Role entity = roleRepository.findById(id).orElse(null);
         return Optional.ofNullable(modelMapper.map(entity, RoleDTO.class));
     }
 
-    @Override
-    public void save(RoleDTO roleDto) {
-        Role role = modelMapper.map(roleDto, Role.class);
-        roleRepository.save(role);
-    }
-    @Override
-    public void remove(Long id) {
-        roleRepository.deleteById(id);
-    }
 }

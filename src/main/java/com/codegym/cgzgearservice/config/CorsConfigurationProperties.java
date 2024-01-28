@@ -1,4 +1,5 @@
 package com.codegym.cgzgearservice.config;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.ArrayList;
@@ -6,8 +7,7 @@ import java.util.List;
 
 
 @ConfigurationProperties(prefix = "cgzgearservice.cors")
-public class CorsConfigurationProperties
-{
+public class CorsConfigurationProperties {
 
     /**
      * Comma-separated list of origins to allow. '*' allows all origins. When not set,

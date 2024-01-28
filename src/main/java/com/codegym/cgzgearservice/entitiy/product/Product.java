@@ -30,7 +30,7 @@ public class Product {
     @Column(name = "available", nullable = false, columnDefinition = "BIT default false")
     private Boolean available;
 
-    @OneToOne(mappedBy = "product",fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "product", fetch = FetchType.EAGER)
     private ProductDetail productDetail;
 
     @ManyToOne

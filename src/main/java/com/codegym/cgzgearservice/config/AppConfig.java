@@ -33,5 +33,5 @@ public class AppConfig implements WebMvcConfigurer {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
         return modelMapper;
     }
- }
+}
 

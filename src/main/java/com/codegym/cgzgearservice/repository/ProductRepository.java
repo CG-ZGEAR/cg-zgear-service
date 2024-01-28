@@ -18,5 +18,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
     @Query("SELECT p FROM Product p WHERE p.available = true")
     Page<Product> findAllAvailable(Pageable pageable);
+
     Product findProductByIdAndAvailableIsTrue(Long id);
 }
