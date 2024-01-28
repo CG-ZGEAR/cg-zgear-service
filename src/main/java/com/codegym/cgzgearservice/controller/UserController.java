@@ -71,15 +71,15 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update/{userId}")
-    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO, @PathVariable Long userId) {
-        UserDTO user = userService.getUserById(userId);
-        if (userDTO == null) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        @PutMapping("/update/{userId}")
+        public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO, @PathVariable Long userId) {
+            UserDTO user = userService.getUserById(userId);
+            if (userDTO == null) {
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
+            userDTO.setId(user.getId());
+            return new ResponseEntity<>(userService.updateUser( userId,  userDTO), HttpStatus.OK);
         }
-        userDTO.setId(user.getId());
-        return new ResponseEntity<>(userService.updateUser(userDTO), HttpStatus.OK);
-    }
 
     @GetMapping("/detail")
     public ResponseEntity<UserDTO> getUser(HttpServletRequest httpRequest) {
@@ -87,7 +87,4 @@ public class UserController {
     }
 }
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 2ea9ece2c93422d1bbfa8dd22d18cda56deceed0

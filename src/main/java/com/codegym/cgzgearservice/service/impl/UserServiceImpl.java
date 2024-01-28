@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private  final ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
     private final RoleRepository roleRepository;
     final JwtTokenProvider jwtTokenProvider;
 
@@ -68,19 +68,44 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUser(UserDTO userDTO) {
-        User user = modelMapper.map(userDTO, User.class);
-        if (!userRepository.existsByUsername(user.getUsername())) {
-            throw new IllegalArgumentException("Username doesn't exists");
+    public UserDTO updateUser(Long userId, UserDTO userDTO) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isPresent()) {
+            User existingUser = optionalUser.get();
+            if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+                String hashedPassword = BCrypt.hashpw(userDTO.getPassword(), BCrypt.gensalt(10));
+                existingUser.setPassword(hashedPassword);
+            }
+            if (userDTO.getUsername() != null) {
+                existingUser.setUsername(userDTO.getUsername());
+            }
+            if (userDTO.getFullName() != null) {
+                existingUser.setFullName(userDTO.getFullName());
+            }
+            if (userDTO.getPhoneNumber() != null) {
+                existingUser.setPhoneNumber(userDTO.getPhoneNumber());
+            }
+            if (userDTO.getGender() != null) {
+                existingUser.setGender(userDTO.getGender());
+            }
+            if (userDTO.getEmail() != null) {
+                existingUser.setEmail(userDTO.getEmail());
+            } else {
+                throw new IllegalArgumentException("Email cannot be null");
+            }
+            if (userDTO.getDate() != null) {
+                existingUser.setDate(userDTO.getDate());
+            }
+            if (userDTO.getAvatar() != null) {
+                existingUser.setAvatar(userDTO.getAvatar());
+            }
+            userRepository.save(existingUser);
+            return convertToUserDTO(existingUser);
+        } else {
+            throw new IllegalArgumentException("User not found with ID: " + userId);
         }
-        if (!userDTO.getPassword().isEmpty()) {
-            String hashedPassword = BCrypt.hashpw(userDTO.getPassword(), BCrypt.gensalt(10));
-            user.setPassword(hashedPassword);
-        }
-        userRepository.save(user);
-        UserDTO savedDTO = modelMapper.map(user, UserDTO.class);
-        return savedDTO;
     }
+
 
     @Override
     public UserDTO getUserById(Long userId) {

@@ -77,7 +77,7 @@ public class AuthController {
 
 
     private User getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findUserByUsername(username);
     }
 
     @PostMapping("/logout")

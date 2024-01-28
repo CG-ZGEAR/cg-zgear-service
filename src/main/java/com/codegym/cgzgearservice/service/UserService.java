@@ -16,7 +16,7 @@ public interface UserService {
 
     UserDTO registerUser(UserDTO userDTO);
 
-    UserDTO updateUser(UserDTO userDTO);
+    UserDTO updateUser(Long userId, UserDTO userDTO);
 
     UserDTO getUserById(Long userId);
 
@@ -34,18 +34,14 @@ public interface UserService {
 
     void unlockAccount(long userId);
 
-<<<<<<< HEAD
 
 
     Page <UserDTO> search (SearchRequest searchRequest, Pageable  pageable);
     UserDTO getUserByToken(HttpServletRequest httpRequest);
 }
 
-=======
-    Page <UserDTO> search (SearchRequest searchRequest, Pageable  pageable);
-    UserDTO getUserByToken(HttpServletRequest httpRequest);
-}
->>>>>>> 2ea9ece2c93422d1bbfa8dd22d18cda56deceed0
+
+
 
 
     
