@@ -27,15 +27,14 @@ public class Order {
 
     private String customerEmail;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    private String orderDate;
-
-    private String paymentDate;
+    private String dateCreated;
 
     private Double total;
 

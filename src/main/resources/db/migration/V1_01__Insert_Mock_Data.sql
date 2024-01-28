@@ -159,10 +159,10 @@ VALUES (2, 4, '49 inch'),
        (2, 6, 'QLED');
 
 -- Insert data into orders and order_items
-INSERT INTO orders (status, date_created, total)
+INSERT INTO orders (status, date_created, total,address_id)
 VALUES
-    ('SHIPPED', NOW(), 1999.98),
-    ('SHIPPED', NOW(), 59.97);
+    ('SHIPPED', NOW(), 1999.98,1),
+    ('SHIPPED', NOW(), 59.97,1);
 
 -- Order 1 items
 INSERT INTO order_items (order_id, product_id, quantity, sub_total)

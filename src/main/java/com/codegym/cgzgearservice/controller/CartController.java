@@ -1,8 +1,10 @@
 package com.codegym.cgzgearservice.controller;
 
 import com.codegym.cgzgearservice.dto.CartDTO;
+import com.codegym.cgzgearservice.dto.OrderDTO;
 import com.codegym.cgzgearservice.repository.UserRepository;
 import com.codegym.cgzgearservice.service.CartService;
+import com.codegym.cgzgearservice.service.OrderService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.mapping.Map;
@@ -19,6 +21,7 @@ public class CartController {
 
     private final CartService cartService;
     private final UserRepository userRepository;
+    private final OrderService orderService;
 
     @PostMapping("/add/{productId}")
     public ResponseEntity<CartDTO> addToCart(
@@ -84,4 +87,21 @@ public class CartController {
                 .body(cartDTO);
 
     }
+
+    @PostMapping("/proceed")
+    public ResponseEntity<OrderDTO> proceedToOrder(@RequestBody OrderDTO orderDTO,
+                               @AuthenticationPrincipal User authUser,
+                               HttpSession session
+    ) {
+        if (authUser == null){
+            orderDTO = orderService.processOrder(null,session.getId(), orderDTO);
+
+        } else {
+            com.codegym.cgzgearservice.entitiy.user.User user = userRepository.findUserByUsername(authUser.getUsername());
+            orderDTO = orderService.processOrder(user,session.getId(), orderDTO);
+        }
+        return ResponseEntity.ok()
+                .body(orderDTO);
+    }
+
 }
