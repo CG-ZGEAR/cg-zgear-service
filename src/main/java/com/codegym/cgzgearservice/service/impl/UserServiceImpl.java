@@ -8,7 +8,9 @@ import com.codegym.cgzgearservice.entitiy.user.Role;
 import com.codegym.cgzgearservice.entitiy.user.User;
 import com.codegym.cgzgearservice.repository.RoleRepository;
 import com.codegym.cgzgearservice.repository.UserRepository;
+import com.codegym.cgzgearservice.security.JwtTokenProvider;
 import com.codegym.cgzgearservice.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
 
     @Override
     public Page<UserDTO> findAll(Pageable pageable) {
@@ -175,6 +179,14 @@ public class UserServiceImpl implements UserService {
                 pageable
         );
         return userPage.map(this::convertToUserDTO);
+    }
+
+    @Override
+    public UserDTO getUserByToken(HttpServletRequest httpRequest) {
+        String token = httpRequest.getHeader("Authorization").substring(7);
+        String username = jwtTokenProvider.getUsernameFromJWT(token);
+        User user = userRepository.findUserByUsername(username);
+        return convertToUserDTO(user);
     }
 
 
