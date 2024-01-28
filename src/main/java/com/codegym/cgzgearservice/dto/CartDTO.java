@@ -13,6 +13,7 @@ public class CartDTO {
     private double totalPrice;
 
     public double getTotalPrice() {
+        this.totalPrice=0;
         for (CartItemDTO cartItemDTO : cartItems) {
             totalPrice += cartItemDTO.getSubTotal();
         }

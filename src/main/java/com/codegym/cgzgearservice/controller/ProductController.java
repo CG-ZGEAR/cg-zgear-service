@@ -35,7 +35,7 @@ public class ProductController {
     @GetMapping("/search")
     public ResponseEntity<Page<ProductDTO>> searchProducts(
             @RequestParam String searchTerm,
-            @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+            @PageableDefault(size = 12, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         Page<ProductDTO> products = productService.searchProduct(searchTerm, pageable);
         return ResponseEntity.ok(products);
     }
@@ -97,5 +97,10 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
-
+    @GetMapping("/getNewArrivals")
+    public ResponseEntity<Page<ProductDTO>> getNewArrivals(
+            @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<ProductDTO> products = productService.getAllProducts(pageable);
+        return ResponseEntity.ok(products);
+    }
 }

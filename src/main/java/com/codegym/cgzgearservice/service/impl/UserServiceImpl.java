@@ -12,6 +12,7 @@ import com.codegym.cgzgearservice.security.JwtTokenProvider;
 import com.codegym.cgzgearservice.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,17 +29,13 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
-    RoleRepository roleRepository;
-
-    @Autowired
-    JwtTokenProvider jwtTokenProvider;
+    private final UserRepository userRepository;
+    private  final ModelMapper modelMapper;
+    private final RoleRepository roleRepository;
+    final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public Page<UserDTO> findAll(Pageable pageable) {
@@ -90,9 +87,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElse(null);
         return modelMapper.map(user, UserDTO.class);
     }
-
-
-
 
     @Override
     public void DeleteUserById(Long userId) {

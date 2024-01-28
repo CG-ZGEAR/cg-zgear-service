@@ -34,12 +34,10 @@ public interface UserService {
 
     void unlockAccount(long userId);
 
-
-
-
     Page <UserDTO> search (SearchRequest searchRequest, Pageable  pageable);
     UserDTO getUserByToken(HttpServletRequest httpRequest);
 }
 
 
+    
 

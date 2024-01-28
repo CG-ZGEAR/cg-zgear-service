@@ -79,6 +79,7 @@ public class SecurityConfiguration {
                                 "/api/products/**",
                                 "/api/categories/**",
                                 "/api/carts/**",
+                                "/api/carts",
                                 "/getBestSellers"
                         ).permitAll()
                         .requestMatchers("/**").hasRole("ADMIN")

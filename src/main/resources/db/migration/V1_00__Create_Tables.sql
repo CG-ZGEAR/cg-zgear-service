@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS addresses (
     city VARCHAR(45),
     district VARCHAR(45),
     ward VARCHAR(45),
+    is_deleted BIT DEFAULT 0,
     is_default BIT DEFAULT 0,
     CONSTRAINT user_id_fk FOREIGN KEY (user_id) REFERENCES users (id)
     );
@@ -106,7 +107,13 @@ CREATE TABLE IF NOT EXISTS orders (
                                       id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
                                       status ENUM('PENDING', 'PAID', 'SHIPPED'),
     date_created DATETIME,
-    total DOUBLE
+    total DOUBLE,
+    customer_name VARCHAR(255),
+    customer_email VARCHAR(255),
+    address_id BIGINT,
+    FOREIGN KEY (address_id) REFERENCES addresses(id),
+    user_id BIGINT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
     );
 
 CREATE TABLE IF NOT EXISTS order_items (
