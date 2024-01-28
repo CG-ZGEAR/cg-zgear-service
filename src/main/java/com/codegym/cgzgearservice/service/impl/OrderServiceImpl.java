@@ -13,6 +13,9 @@ import com.codegym.cgzgearservice.repository.OrderRepository;
 import com.codegym.cgzgearservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -27,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
     private final ModelMapper modelMapper;
     private final OrderRepository orderRepository;
     private final AddressRepository addressRepository;
-
+    private final MailSender mailSender;
     @Override
     public OrderDTO processOrder(User user, String sessionId, OrderDTO orderDTO) {
         Order order = new Order();
@@ -35,8 +38,11 @@ public class OrderServiceImpl implements OrderService {
         order.setCustomerEmail(orderDTO.getCustomerEmail());
         order.setStatus(OrderStatus.PENDING);
         order.setDateCreated(LocalDateTime.now().toString());
-
+        order.setTotal(orderDTO.getTotal());
         AddressDTO addressDTO = orderDTO.getAddressDTO();
+        if (user != null) {
+            order.setUser(user);
+        }
         Address address;
 
         if (addressDTO.getId() != null) {
@@ -49,6 +55,7 @@ public class OrderServiceImpl implements OrderService {
             address.setDistrict(addressDTO.getDistrict());
             address.setWard(addressDTO.getWard());
             address.setUser(user);
+            address.setIsDeleted(false);
             addressRepository.save(address);
         }
         order.setAddress(address);
@@ -57,8 +64,23 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
 
         order.setItems(orderItems);
-        Order savedOrder = orderRepository.save(order);
+        orderRepository.save(order);
+        sendOrderConfirmationEmail(orderDTO.getCustomerEmail(), order);
 
-        return modelMapper.map(savedOrder, OrderDTO.class);
+        orderDTO.getAddressDTO().setId(address.getId());
+        return orderDTO;
     }
+    private void sendOrderConfirmationEmail(String customerEmail, Order order) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("tranhuutjnh@gmail.com");
+            message.setTo(customerEmail);
+            message.setSubject("Order Confirmation");
+            message.setText("Thank you for your order! Your order has been confirmed." + order.toString());
+            mailSender.send(message);
+        } catch (MailException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
