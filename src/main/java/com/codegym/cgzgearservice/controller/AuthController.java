@@ -4,6 +4,8 @@ package com.codegym.cgzgearservice.controller;
 import com.codegym.cgzgearservice.dto.payload.request.*;
 
 import com.codegym.cgzgearservice.dto.payload.response.LoginResponse;
+import com.codegym.cgzgearservice.entitiy.user.User;
+import com.codegym.cgzgearservice.repository.UserRepository;
 import com.codegym.cgzgearservice.security.JwtTokenProvider;
 import com.codegym.cgzgearservice.service.ForgotPasswordService;
 import com.codegym.cgzgearservice.service.UserService;
@@ -19,8 +21,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +36,7 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
+    private final UserRepository userRepository;
 
     @Autowired
     private UserService userService;
@@ -49,22 +50,37 @@ public class AuthController {
                     .authenticate(new UsernamePasswordAuthenticationToken(
                             loginRequest.getUsername(), loginRequest.getPassword()));
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            User user = getUserByUsername(loginRequest.getUsername());
 
-            String token = tokenProvider.generateToken(authentication);
+            if (user.isActivated()) {
+                if (!user.isDeleted()) {
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            List<String> roles = authentication.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.toList());
-            return new ResponseEntity<>(new LoginResponse("Đăng nhập thành công!", roles, token), HttpStatus.OK);
+                    String token = tokenProvider.generateToken(authentication);
+
+                    List<String> roles = authentication.getAuthorities().stream()
+                            .map(GrantedAuthority::getAuthority)
+                            .collect(Collectors.toList());
+
+                    return new ResponseEntity<>(new LoginResponse("Đăng nhập thành công!", roles, token), HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(new LoginResponse("Account does not exist", null, null), HttpStatus.BAD_GATEWAY);
+                }
+            } else {
+                return new ResponseEntity<>(new LoginResponse("Account locked!! Please contact admin for help", null, null), HttpStatus.FORBIDDEN);
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(new LoginResponse("Đăng nhập thất bại!", null, null), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new LoginResponse("Check your username and password again!", null, null), HttpStatus.BAD_REQUEST);
         }
-
     }
 
-        @PostMapping("/logout")
+
+    private User getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -78,11 +94,10 @@ public class AuthController {
         }
     }
 
-
     @PostMapping("/otp/send")
     public ResponseEntity<String> sendOtp(@RequestBody SendMailRequest sendMailRequest) {
         forgotPasswordService.sendOtpAndSaveToDatabase(sendMailRequest);
-        return  new ResponseEntity<>("OTP sent successfully.",HttpStatus.OK);
+        return new ResponseEntity<>("OTP sent successfully.", HttpStatus.OK);
     }
 
     @PostMapping("reset-password/verify-otp")

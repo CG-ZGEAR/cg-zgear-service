@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController {
 
     private final ProductService productService;
+
     @GetMapping("/{categoryName}")
     public ResponseEntity<Page<ProductDTO>> getProductsByCategory(
             @PageableDefault(size = 12, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,

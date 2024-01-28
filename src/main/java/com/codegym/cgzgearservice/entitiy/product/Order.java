@@ -38,7 +38,7 @@ public class Order {
 
     private Double total;
 
-    @OneToMany(mappedBy="order")
+    @OneToMany(mappedBy = "order")
     private List<OrderItem> items;
 
 }
