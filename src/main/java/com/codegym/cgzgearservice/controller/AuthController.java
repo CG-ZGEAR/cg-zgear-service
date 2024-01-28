@@ -4,7 +4,6 @@ package com.codegym.cgzgearservice.controller;
 import com.codegym.cgzgearservice.dto.payload.request.*;
 
 import com.codegym.cgzgearservice.dto.payload.response.LoginResponse;
-import com.codegym.cgzgearservice.dto.payload.response.ResetPasswordResponse;
 import com.codegym.cgzgearservice.security.JwtTokenProvider;
 import com.codegym.cgzgearservice.service.ForgotPasswordService;
 import com.codegym.cgzgearservice.service.UserService;
@@ -65,7 +64,7 @@ public class AuthController {
 
     }
 
-    @PostMapping("/logout")
+        @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -88,14 +87,7 @@ public class AuthController {
 
     @PostMapping("reset-password/verify-otp")
     public ResponseEntity<String> verifyOtpAndResetPassword(
-            @RequestParam String email,
-            @RequestParam String otp,
-            @RequestParam String newPassword) {
-        VerifyOtpRequest verifyOtpRequest = new VerifyOtpRequest();
-        verifyOtpRequest.setEmail(email);
-        verifyOtpRequest.setOtp(otp);
-        verifyOtpRequest.setNewPassword(newPassword);
-
+            @RequestBody VerifyOtpRequest verifyOtpRequest) {
         forgotPasswordService.verifyOtpAndResetPassword(verifyOtpRequest);
         return ResponseEntity.ok("Password reset successfully.");
     }

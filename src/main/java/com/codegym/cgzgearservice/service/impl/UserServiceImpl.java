@@ -3,6 +3,7 @@ package com.codegym.cgzgearservice.service.impl;
 
 import com.codegym.cgzgearservice.dto.ManageUserDTO;
 import com.codegym.cgzgearservice.dto.UserDTO;
+import com.codegym.cgzgearservice.dto.payload.request.SearchRequest;
 import com.codegym.cgzgearservice.entitiy.user.Role;
 import com.codegym.cgzgearservice.entitiy.user.User;
 import com.codegym.cgzgearservice.repository.RoleRepository;
@@ -165,28 +166,17 @@ public class UserServiceImpl implements UserService {
         });
     }
 
-    @Override
-    public UserDTO getUserByUsername(String username) {
-        User user = userRepository.findByUsername(username);
-        if (user != null) {
-            return convertUserToUserDTO(user);
-        }
-        return null;
+
+    public Page<UserDTO> search(SearchRequest searchRequest, Pageable pageable) {
+        Page<User> userPage = userRepository.findByUsernameContainingOrFullNameContainingOrEmailContaining(
+                searchRequest.getUsername(),
+                searchRequest.getFullName(),
+                searchRequest.getEmail(),
+                pageable
+        );
+        return userPage.map(this::convertToUserDTO);
     }
 
-    private UserDTO convertUserToUserDTO(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setUsername(user.getUsername());
-        userDTO.setFullName(user.getFullName());
-        userDTO.setPhoneNumber(user.getPhoneNumber());
-        userDTO.setGender(user.getGender());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setDate(user.getDate());
-        userDTO.setAvatar(user.getAvatar());
-        userDTO.setPassword(user.getPassword());
-         return userDTO;
-    }
 
     private UserDTO convertToUserDTO(User user) {
         UserDTO dto = modelMapper.map(user, UserDTO.class);
