@@ -11,9 +11,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -34,6 +34,7 @@ public class UserController {
         Page<ManageUserDTO> deletedUsersPage = userService.getDeletedUsers(pageable);
         return new ResponseEntity<>(deletedUsersPage, HttpStatus.OK);
     }
+
     @PostMapping("/{userId}/lock")
     public ResponseEntity<String> lockUserAccount(@PathVariable long userId) {
         userService.lockAccount(userId);
@@ -55,6 +56,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
     @PostMapping("/register")
     public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO) {
         if (userDTO == null) {
@@ -70,17 +72,19 @@ public class UserController {
     }
 
     @PutMapping("/update/{userId}")
-    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO, @PathVariable Long userId){
-    UserDTO user = userService.getUserById(userId);
-    if (userDTO == null){
-        return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
-    }
-    userDTO.setId(user.getId());
-    return new ResponseEntity<>(userService.updateUser(userDTO), HttpStatus.OK);
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO, @PathVariable Long userId) {
+        UserDTO user = userService.getUserById(userId);
+        if (userDTO == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        userDTO.setId(user.getId());
+        return new ResponseEntity<>(userService.updateUser(userDTO), HttpStatus.OK);
     }
 
     @GetMapping("/detail")
     public ResponseEntity<UserDTO> getUser(HttpServletRequest httpRequest) {
         return new ResponseEntity<>(userService.getUserByToken(httpRequest), HttpStatus.OK);
     }
+}
+
 }

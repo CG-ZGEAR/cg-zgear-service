@@ -1,10 +1,11 @@
 package com.codegym.cgzgearservice.paging;
 
 
-public class PageRequest implements Pageble{
+public class PageRequest implements Pageble {
     private Integer page;
     private Integer maxPageItem;
     private Sorter sorter;
+
     public PageRequest(Integer page, Integer maxPageItem, Sorter sorter) {
         this.page = page;
         this.maxPageItem = maxPageItem;

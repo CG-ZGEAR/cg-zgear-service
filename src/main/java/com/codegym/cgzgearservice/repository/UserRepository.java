@@ -6,25 +6,26 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByUsername(String username);
+
     User findUserByUsername(String username);
-    User findUserByEmail(String email);
+
+    User findByUsername(String username);
 
     @Query("SELECT ur.name FROM User u JOIN u.roles ur WHERE u.username = :username")
     List<String> findRolesNamesByUsername(@Param("username") String username);
 
-    List<User> findByUsernameContainsIgnoreCase(String username);
 
-    User findUserById(Long userId);
+    Page<User> findByIsDeletedTrue(Pageable pageable);
 
-    Page <User> findByIsDeletedTrue(Pageable pageable);
+    Page<User> findByIsDeletedFalse(Pageable pageable);
 
-    Page <User> findByIsDeletedFalse(Pageable pageable);
     User findByEmail(String email);
 
     Optional<User> findByEmailAndOtpCodeAndOtpExpirationAfter(String email, String otp, LocalDateTime expirationTime);

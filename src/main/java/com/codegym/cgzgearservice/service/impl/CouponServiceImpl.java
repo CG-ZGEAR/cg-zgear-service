@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class CouponServiceImpl implements CouponService {
     private final CouponRepository couponRepository;
     private final ModelMapper modelMapper;
+
     @Override
     public List<CouponDTO> findAllActiveCoupon() {
         List<Coupon> coupons = couponRepository.findAllActiveAndNotExpiredCoupons();

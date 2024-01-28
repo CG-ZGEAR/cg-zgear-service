@@ -26,7 +26,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 
-
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
@@ -34,7 +33,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private  ModelMapper modelMapper;
+    private ModelMapper modelMapper;
     @Autowired
     RoleRepository roleRepository;
 
@@ -102,7 +101,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-        public void DeleteUserById(Long userId) {
+    public void DeleteUserById(Long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
             User userToDelete = userOptional.get();
@@ -112,7 +111,6 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("User not found with ID: " + userId);
         }
     }
-
 
 
     @Override
@@ -138,14 +136,15 @@ public class UserServiceImpl implements UserService {
         return userDTOS;
     }
 
-      @Override
+    @Override
     public Page<ManageUserDTO> getActiveUsers(Pageable pageable) {
         Page<User> activeUsersPage = userRepository.findByIsDeletedFalse(pageable);
         return activeUsersPage.map(this::convertToManageUserDTO);
     }
+
     @Override
     public Page<ManageUserDTO> getDeletedUsers(Pageable pageable) {
-        Page <User> deletedUsersPage = userRepository.findByIsDeletedTrue(pageable);
+        Page<User> deletedUsersPage = userRepository.findByIsDeletedTrue(pageable);
         return deletedUsersPage.map(this::convertToManageUserDTO);
     }
 
@@ -171,7 +170,7 @@ public class UserServiceImpl implements UserService {
         });
     }
 
-    @Override
+
     public Page<UserDTO> search(SearchRequest searchRequest, Pageable pageable) {
         Page<User> userPage = userRepository.findByUsernameContainingOrFullNameContainingOrEmailContaining(
                 searchRequest.getUsername(),
@@ -195,6 +194,7 @@ public class UserServiceImpl implements UserService {
         UserDTO dto = modelMapper.map(user, UserDTO.class);
         return dto;
     }
+
     private ManageUserDTO convertToManageUserDTO(User user) {
         ManageUserDTO dto = modelMapper.map(user, ManageUserDTO.class);
         return dto;

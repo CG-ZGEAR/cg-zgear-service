@@ -19,6 +19,7 @@ public class RoleFormatter implements Formatter<RoleDTO> {
     public RoleFormatter(RoleService roleService) {
         this.roleService = roleService;
     }
+
     @Override
     public RoleDTO parse(String text, Locale locale) throws ParseException {
         Optional<RoleDTO> roleDto = roleService.findById(Long.parseLong(text));
