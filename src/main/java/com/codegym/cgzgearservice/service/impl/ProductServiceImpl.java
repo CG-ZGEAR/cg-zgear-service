@@ -123,6 +123,38 @@ public class ProductServiceImpl implements ProductService {
         return products.map(this::convertToProductDTO);
     }
 
+    @Override
+    @Transactional
+    public ReviewDTO addReview(Long productId, ReviewDTO reviewDTO, Principal principal) {
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (optionalProduct.isPresent()) {
+            Product product = optionalProduct.get();
+
+            // Lấy thông tin người dùng từ Principal
+            User user = userService.findUserByUsername(principal.getName());
+
+            Review review = new Review();
+            review.setRating(reviewDTO.getRating());
+            review.setComment(reviewDTO.getComment());
+            review.setCreatedAt(LocalDateTime.now());
+            review.setUser(user); // Thiết lập người dùng đánh giá
+            review.setProduct(product);
+
+            product.getReviews().add(review);
+            productRepository.save(product);
+
+            return modelMapper.map(review, ReviewDTO.class);
+        } else {
+            throw new ProductNotFoundException("Product not found");
+        }
+    }
+
+    @Override
+    public Page<ProductDTO> getBestSellers(Pageable pageable) {
+        Page<Product> products = productRepository.getBestSellers(pageable);
+        return products.map(this::convertToProductDTO);
+    }
+
     private ProductDTO convertToProductDTO(Product product) {
         ProductDTO dto = modelMapper.map(product, ProductDTO.class);
         dto.setImageUrls(product.getProductImages().stream()
@@ -243,30 +275,5 @@ public class ProductServiceImpl implements ProductService {
         return dto;
     }
 
-    @Override
-    @Transactional
-    public ReviewDTO addReview(Long productId, ReviewDTO reviewDTO, Principal principal) {
-        Optional<Product> optionalProduct = productRepository.findById(productId);
-        if (optionalProduct.isPresent()) {
-            Product product = optionalProduct.get();
-
-            // Lấy thông tin người dùng từ Principal
-            User user = userService.findUserByUsername(principal.getName());
-
-            Review review = new Review();
-            review.setRating(reviewDTO.getRating());
-            review.setComment(reviewDTO.getComment());
-            review.setCreatedAt(LocalDateTime.now());
-            review.setUser(user); // Thiết lập người dùng đánh giá
-            review.setProduct(product);
-
-            product.getReviews().add(review);
-            productRepository.save(product);
-
-            return modelMapper.map(review, ReviewDTO.class);
-        } else {
-            throw new ProductNotFoundException("Product not found");
-        }
-    }
 
 }

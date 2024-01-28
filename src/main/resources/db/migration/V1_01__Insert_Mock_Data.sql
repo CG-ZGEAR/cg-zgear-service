@@ -157,3 +157,19 @@ INSERT INTO specifications (product_detail_id, template_id, spec_value)
 VALUES (2, 4, '49 inch'),
        (2, 5, '240Hz'),
        (2, 6, 'QLED');
+
+-- Insert data into orders and order_items
+INSERT INTO orders (status, date_created, total)
+VALUES
+    ('SHIPPED', NOW(), 1999.98),
+    ('SHIPPED', NOW(), 59.97);
+
+-- Order 1 items
+INSERT INTO order_items (order_id, product_id, quantity, sub_total)
+VALUES
+    (1, 1, 2, 1999.98);
+
+-- Order 2 items
+INSERT INTO order_items (order_id, product_id, quantity, sub_total)
+VALUES
+    (2, 2, 3, 59.97);

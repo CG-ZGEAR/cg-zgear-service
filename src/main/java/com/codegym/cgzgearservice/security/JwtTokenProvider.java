@@ -44,6 +44,7 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
     public String getJwtFromBearerToken(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
@@ -71,6 +72,7 @@ public class JwtTokenProvider {
         }
         return false;
     }
+
     public boolean isAuthenticated() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null
@@ -79,6 +81,7 @@ public class JwtTokenProvider {
         }
         return authentication.isAuthenticated();
     }
+
     public boolean isValidToken(String authToken) {
         String jwt = getJwtFromBearerToken(authToken);
         if (StringUtils.hasText(jwt) && validateToken(authToken)) {

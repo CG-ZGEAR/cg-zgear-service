@@ -30,7 +30,7 @@ public class Product {
     @Column(name = "available", nullable = false, columnDefinition = "BIT default false")
     private Boolean available;
 
-    @OneToOne(mappedBy = "product",fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "product", fetch = FetchType.EAGER)
     private ProductDetail productDetail;
 
     @ManyToOne
@@ -48,5 +48,14 @@ public class Product {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<ProductDiscount> discounts;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<CartItem> cartItems;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<OrderItem> orderItems;
+
 
 }

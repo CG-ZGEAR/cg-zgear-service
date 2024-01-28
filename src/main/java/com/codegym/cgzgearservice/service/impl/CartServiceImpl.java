@@ -28,14 +28,8 @@ public class CartServiceImpl implements CartService {
     private final ProductDiscountService productDiscountService;
 
     @Override
-    public CartDTO addToCart(User user, Long productId, int quantity) {
-
-        Cart cart = cartRepository.findByUser(user);
-        if (cart == null) {
-            cart = new Cart();
-            cart.setUser(user);
-            cartRepository.save(cart);
-        }
+    public CartDTO addToCart(User user,String sessionId, Long productId, int quantity) {
+        Cart cart = checkIfCartExist(user, sessionId);
         CartItem existingItem = cart.getCartItems().stream()
                 .filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst()
@@ -43,20 +37,47 @@ public class CartServiceImpl implements CartService {
         if (existingItem != null) {
             existingItem.setQuantity(existingItem.getQuantity() + quantity);
             Double price = getPriceForCartItem(productRepository.findProductByIdAndAvailableIsTrue(productId), existingItem.getQuantity());
-            existingItem.setPrice(price);
+            existingItem.setSubTotal(price);
         } else {
             CartItem cartItem = new CartItem();
             Product product = productRepository.findProductByIdAndAvailableIsTrue(productId);
             cartItem.setCart(cart);
             cartItem.setProduct(product);
             cartItem.setQuantity(quantity);
-            cartItem.setPrice(getPriceForCartItem(product, 1));
+            cartItem.setSubTotal(getPriceForCartItem(product, 1));
             cartItemRepository.save(cartItem);
             cart.getCartItems().add(cartItem);
         }
         cartRepository.save(cart);
         CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
         return cartDTO;
+    }
+    @Override
+    public CartDTO getCart(User user, String sessionId) {
+        Cart cart = checkIfCartExist(user, sessionId);
+        CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
+        return cartDTO;
+
+    }
+    private Cart checkIfCartExist(User user, String sessionId){
+        Cart cart;
+        if (user==null){
+            cart = cartRepository.findCartBySessionId(sessionId);
+            if (cart == null) {
+                cart = new Cart();
+                cart.setSessionId(sessionId);
+                cartRepository.save(cart);
+            }
+
+        } else  {
+            cart = cartRepository.findByUser(user);
+            if (cart == null) {
+                cart = new Cart();
+                cart.setUser(user);
+                cartRepository.save(cart);
+            }
+        }
+        return cart;
     }
 
     private Double getPriceForCartItem(Product product, int quantity) {
