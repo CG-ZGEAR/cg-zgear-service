@@ -1,12 +1,15 @@
 package com.codegym.cgzgearservice.entitiy.user;
 
 import com.codegym.cgzgearservice.entitiy.product.Order;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "addresses")
@@ -42,9 +45,9 @@ public class Address {
     @JoinColumn(name = "user_id", nullable = true)
     User user;
 
-    @ManyToOne
-    @JoinColumn(name = "oder_id", nullable = true)
-    Order oder;
+    @OneToMany(mappedBy = "address")
+    @JsonIgnore
+    private List<Order> orders;
 
 
 }
