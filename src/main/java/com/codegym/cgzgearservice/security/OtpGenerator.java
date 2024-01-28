@@ -1,5 +1,7 @@
 package com.codegym.cgzgearservice.security;
+
 import org.springframework.stereotype.Component;
+
 import java.security.SecureRandom;
 
 @Component

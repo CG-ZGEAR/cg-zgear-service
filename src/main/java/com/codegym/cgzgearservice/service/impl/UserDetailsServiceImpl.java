@@ -22,9 +22,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) {
         User user = userRepo.findUserByUsername(username);
         List<String> roles;
-        if(user == null) {
+        if (user == null) {
             user = userRepo.findUserByUsername(username);
-            roles= userRepo.findRolesNamesByUsername(username);
+            roles = userRepo.findRolesNamesByUsername(username);
         } else {
             roles = userRepo.findRolesNamesByUsername(username);
         }
@@ -32,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("User " + username + "was not found in database!");
         }
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        for (String role: roles) {
+        for (String role : roles) {
             GrantedAuthority authority = new SimpleGrantedAuthority(role);
             grantedAuthorities.add(authority);
         }

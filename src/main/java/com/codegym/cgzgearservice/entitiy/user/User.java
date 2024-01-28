@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name= "users")
+@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -51,10 +51,10 @@ public class User {
     @Column(name = "avatar", length = 50)
     private String avatar;
 
-    @Column(name = "activated", nullable = false,  columnDefinition = "BIT default true")
+    @Column(name = "activated", nullable = false, columnDefinition = "BIT default true")
     private boolean activated;
 
-    @Column(name = "is_deleted",nullable = false,  columnDefinition = "BIT default true" )
+    @Column(name = "is_deleted", nullable = false, columnDefinition = "BIT default true")
     private boolean isDeleted;
 
     @Column(name = "otp_code", length = 6)
@@ -71,11 +71,11 @@ public class User {
     @JsonIgnore
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy="user")
+    @OneToMany(mappedBy = "user")
     @JsonIgnore
     List<Address> address;
 
-    @OneToMany(mappedBy ="user")
+    @OneToMany(mappedBy = "user")
     @JsonIgnore
     List<Review> reviews;
 }

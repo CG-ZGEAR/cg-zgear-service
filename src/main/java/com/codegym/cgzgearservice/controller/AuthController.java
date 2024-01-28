@@ -82,7 +82,7 @@ public class AuthController {
     @PostMapping("/otp/send")
     public ResponseEntity<String> sendOtp(@RequestBody SendMailRequest sendMailRequest) {
         forgotPasswordService.sendOtpAndSaveToDatabase(sendMailRequest);
-        return  new ResponseEntity<>("OTP sent successfully.",HttpStatus.OK);
+        return new ResponseEntity<>("OTP sent successfully.", HttpStatus.OK);
     }
 
     @PostMapping("reset-password/verify-otp")

@@ -15,6 +15,5 @@ public class ManageUserDTO {
     private String avatar;
     private boolean activated;
     private boolean isDeleted;
-
 }
 
