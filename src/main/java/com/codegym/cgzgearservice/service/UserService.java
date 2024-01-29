@@ -16,7 +16,7 @@ public interface UserService {
 
     UserDTO registerUser(UserDTO userDTO);
 
-    UserDTO updateUser(UserDTO userDTO);
+    UserDTO updateUser(Long userId, UserDTO userDTO);
 
     UserDTO getUserById(Long userId);
 
@@ -36,10 +36,10 @@ public interface UserService {
 
 
 
-
     Page <UserDTO> search (SearchRequest searchRequest, Pageable  pageable);
     UserDTO getUserByToken(HttpServletRequest httpRequest);
 }
+
 
 
 

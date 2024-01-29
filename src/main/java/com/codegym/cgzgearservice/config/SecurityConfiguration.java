@@ -73,6 +73,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers("/api/auth/**",
                                 "/api/users/register",
+                                "/api/users/update/**",
                                 "/api/users/detail",
                                 "/api/spec-templates/**",
                                 "/api/products",
