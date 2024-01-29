@@ -2,6 +2,7 @@ package com.codegym.cgzgearservice.entitiy.product;
 
 import com.codegym.cgzgearservice.constants.OrderStatus;
 import com.codegym.cgzgearservice.entitiy.user.Address;
+import com.codegym.cgzgearservice.entitiy.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,6 +31,10 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "address_id", nullable = false)
     private Address address;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
