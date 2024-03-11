@@ -76,11 +76,37 @@ public class OrderServiceImpl implements OrderService {
             message.setFrom("tranhuutjnh@gmail.com");
             message.setTo(customerEmail);
             message.setSubject("Order Confirmation");
-            message.setText("Thank you for your order! Your order has been confirmed." );
+            String emailText = buildEmailText(order);
+            message.setText(emailText);
             mailSender.send(message);
         } catch (MailException e) {
             e.printStackTrace();
         }
+    }
+    private String buildEmailText(Order order) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("Dear %s,\n\n", order.getCustomerName()));
+        sb.append("Thank you for your purchase at CodeGym Gear Service! We are preparing your order for shipment and will notify you when it is on its way.\n\n");
+        sb.append(String.format("Order ID: %d\n", order.getId()));
+        sb.append(String.format("Order Date: %s\n\n", order.getDateCreated())); // Assuming dateCreated is in a proper format. If not, use LocalDateTime.parse and format it.
+
+        sb.append("Order Details:\n");
+        String itemsSummary = order.getItems().stream()
+                .map(item -> String.format("%d x %s - $%.2f", item.getQuantity(), item.getProduct().getProductName(), item.getSubTotal()))
+                .collect(Collectors.joining("\n"));
+
+        sb.append(itemsSummary);
+        sb.append("\n\n");
+
+        sb.append(String.format("Total: $%.2f\n\n", order.getTotal()));
+        sb.append("Your order will be shipped to:\n");
+        sb.append(String.format("%s\n\n", order.getAddress().toString()));
+        sb.append("If you have any questions or need to make any changes to your order, please contact our customer service team at tranhuutjnh@gmail.com.\n\n");
+        sb.append("Thank you for shopping with us.\n");
+        sb.append("Best regards,\n");
+        sb.append("The ZGear Service Team");
+
+        return sb.toString();
     }
 
 }

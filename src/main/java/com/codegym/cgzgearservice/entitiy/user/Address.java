@@ -50,4 +50,14 @@ public class Address {
     private List<Order> orders;
 
 
+    //write me a good tostring method that looks easy to read to appear in emails
+    @Override
+    public String toString() {
+        return "your address is: " +
+                "street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", district='" + district + '\'' +
+                ", ward='" + ward + '\''
+                ;
+    }
 }

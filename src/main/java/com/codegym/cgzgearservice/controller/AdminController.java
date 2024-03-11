@@ -57,7 +57,7 @@ public class AdminController {
 
     @PostMapping("/search")
     public Page<UserDTO> search(@RequestBody SearchRequest searchRequest, Pageable pageable) {
-        Pageable modifiedPageable = PageRequest.of(pageable.getPageNumber(), 5);
+        Pageable modifiedPageable = PageRequest.of(pageable.getPageNumber(), 3);
         return userService.search(searchRequest, modifiedPageable);
     }
 
